@@ -28,23 +28,29 @@ where:
 
 > **Measure**: a function that assigns a positive (or $+\infty$) number to each suitable subset of a set. It can be interpreted as the generalisation of concepts such as length, area, and volume.
 
-> **Positive-Operator Valued Measure (POVM)**: I'll get there
+> **Positive-Operator Valued Measure (POVM)**: I'll get there :sob:
 
-The frequency of the two outcomes are collected from a set of $N$ experiments, which are each characterised by the sequence of process gates $s = \{ G_{s_1}, \dots, G_{s_L} \}$ where $L$ is the length of the process chain (????). 
+The frequency of the two outcomes are collected from a set of $N$ experiments, which are each characterised by the sequence of process gates $s = \{ G_{s_1}, \dots, G_{s_L} \}$ where $L$ is the length of the process chain. 
+
+A key point of this is that we're characterising the system as a path through a chain of Mach-Zehnder interferometers. Read Caterina's paper for the real explanation, but essentially this method is interested in the beam splitters and phase shifters.
 
 Data is analysed by several $\chi^2$-estimations, progressively adding more data from longer sequences of gates and then maximizing the likelihood function $\mathscr{L}(\mathscr{G}) = \Pr (data|\mathscr{G})$.
 
 ### ML-Assisted Gate-Set Tomography
 
-The above method is bad. It takes multiple steps of $\chi^2$-minimisation and MLE which is computationally intensive. An alternative is to use machine learning techniques inspired by Quantum Hamiltonian Learning (QHL), which aims to describe the dynamical Hamiltonian evolution of the system (???).
+The above method is bad. It takes multiple steps of $\chi^2$-minimisation and MLE which is computationally intensive. An alternative is to use machine learning techniques inspired by Quantum Hamiltonian Learning (QHL), which aims to describe the dynamical Hamiltonian evolution of the system. 
+
+> This essentially means that we're not interested in the intermediate steps (i.e. what the splitters and interferometers are doing), we're only interested in the evolution of the state. As long as we get the desired output, then we don't care about anything else.
+
+## Experimental quantum Hamiltonian Learning
+
+<div align="center">
+    <a href="https://doi.org/10.1038/nphys4074">Wang, J., Paesani, S., Santagati, R. et al. Experimental quantum Hamiltonian learning. Nature Phys 13, 551–555 (2017)
+</div>
 
 ## Original Gate-Set Tomography Paper
 
 <div align="center">
-    <a href="https://arxiv.org/pdf/1310.4492.pdf">Link to original</a>
+    <a href="https://arxiv.org/pdf/1310.4492.pdf">Robust, self-consistent, closed-form tomography of quantum logic gates on a trapped
+ion qubit</a>
 </div>
-
-
-
-
-
