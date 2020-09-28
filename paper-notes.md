@@ -45,12 +45,13 @@ The above method is bad. It takes multiple steps of $\chi^2$-minimisation and ML
 ## Experimental quantum Hamiltonian Learning
 
 <div align="center">
-    <a href="https://doi.org/10.1038/nphys4074">Wang, J., Paesani, S., Santagati, R. et al. Experimental quantum Hamiltonian learning. Nature Phys 13, 551–555 (2017)
+    <a href="https://doi.org/10.1038/nphys4074">Wang, J., Paesani, S., Santagati, R. et al. Experimental quantum Hamiltonian learning. Nature Phys 13, 551–555 (2017)</a><br/><br/>
 </div>
+
+This paper outlines a Quantum Hamiltonian Learning (QHL), which is a method of characterising quantum systems, aided by machine learning. 
 
 ## Original Gate-Set Tomography Paper
 
 <div align="center">
-    <a href="https://arxiv.org/pdf/1310.4492.pdf">Robust, self-consistent, closed-form tomography of quantum logic gates on a trapped
-ion qubit</a>
+    <a href="https://arxiv.org/pdf/1310.4492.pdf">Robust, self-consistent, closed-form tomography of quantum logic gates on a trapped ion qubit</a><br/><br/>
 </div>
