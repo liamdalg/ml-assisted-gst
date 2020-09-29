@@ -48,7 +48,14 @@ The above method is bad. It takes multiple steps of $\chi^2$-minimisation and ML
     <a href="https://doi.org/10.1038/nphys4074">Wang, J., Paesani, S., Santagati, R. et al. Experimental quantum Hamiltonian learning. Nature Phys 13, 551–555 (2017)</a><br/><br/>
 </div>
 
-This paper outlines a Quantum Hamiltonian Learning (QHL), which is a method of characterising quantum systems, aided by machine learning. 
+This paper outlines a Quantum Hamiltonian Learning (QHL), which is a method of characterising quantum systems, aided by machine learning. Draws mainly on some information from an older paper [Hamiltonian Learning and Certification Using Quantum Resources
+](https://arxiv.org/abs/1309.0876) which is probably a lot more useful for information actually _about_ QHL.
+
+Three modes of estimating the Hamiltonian, proposed in the QHL paper:
+
+* **Classical Likelihood Evaluation (CLE)**: pretty much just regular bayesian where we calculate the likelihood $\Pr (D|x_i)$ using a classical computer given an experiment outcome $D$. This is very inefficient since the likelihood is a quantum process which is difficult for classical computers.
+* **Quantum Likelihood Evaluation (QLE)**: same as above, but we use a *trusted* quantum simulator to estimate the likelihood $\Pr (D|x_i)$ to be the number of times that an outcome $D$ occurs in a large number of experiments. This is good if the likelihood is polynomially small.
+* **Interactive Quantum Likelihood Evaluation (IQLE)**: an improvement on QLE which attempts to deal with the Loschmidt Echo, which means that for complex systems, two near identical Hamiltonians will diverge after a short amount of time. i.e. QLE is only useful for short quantum processes. (MORE STUFF ON IQLE HERE, ITS COMPLICATED)
 
 ## Original Gate-Set Tomography Paper
 
