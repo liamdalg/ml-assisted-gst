@@ -7,15 +7,35 @@
 \brisDepartment{Computer Science}
 \brisFaculty{Engineering}
 \brisDegree{Master of Engineering}
-\brisTitle{Estimating the infidelity of photonic 1-qubit gates using machine learning assisted quantum gate set tomography}
+\brisTitle{Estimating the infidelity of photonic 1-qubit gates using machine learning assisted 
+quantum gate set tomography}
 
 \begin{document}
+
+% The five preliminary pages (with the addition of a cover sheet if there is a partial deferment
+% version – see above) must be the Title Page, Abstract, Dedication and Acknowledgements, Author’s
+% Declaration and Table of Contents. These should be single-sided.
 
 \maketitle
 
 \frontmatter
 
 \makedecl
+
+\import{frontmatter/}{abstract.tex}
+
+\import{frontmatter/}{acknowledgements.tex}
+
+\tableofcontents
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+\addcontentsline{toc}{chapter}{\listalgorithmcfname}
+\listofalgorithms
+\lstlistoflistings
+
+\mainmatter
 
 \import{chapters/introduction/}{introduction.tex}
 

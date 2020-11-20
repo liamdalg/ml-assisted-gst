@@ -4,12 +4,15 @@
 
 %% PACKAGE IMPORTS
 
-\RequirePackage[a4paper, margin=2cm]{geometry}
-\RequirePackage{import}
+\RequirePackage[algochapter]{algorithm2e}
 \RequirePackage{amsmath}
-\RequirePackage{hyperref}
-\RequirePackage{siunitx}
+\RequirePackage{fancyhdr}
+\RequirePackage{geometry}
 \RequirePackage{graphicx}
+\RequirePackage{hyperref}
+\RequirePackage{import}
+\RequirePackage{listings}
+\RequirePackage{siunitx}
 
 %% USER SETTINGS
 
@@ -22,10 +25,32 @@
 %% INTERNAL STUFF
 
 \pagestyle{plain}
+\geometry{a4paper, margin=2cm}
+
+\fancypagestyle{plain}{
+  \fancyhf{}
+
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0.5pt}
+
+  \fancyfoot[C]{\thepage}
+}
+
+\fancypagestyle{marked}{
+  \fancyhf{}
+
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0.5pt}
+
+  \fancyhead[LO]{\slshape \rightmark}
+  \fancyhead[RE]{\slshape  \leftmark}
+
+  \fancyfoot[C]{\thepage}
+}
 
 % semi-accurate word counting
 \newcommand{\quickwordcount}[1]{%
-  \immediate\write18{texcount -sum=1 -1 -q -merge #1.tex > #1-words.sum }%
+  \immediate\write18{texcount -sum=1 -0 -q -merge #1.tex > #1-words.sum }%
   \input{#1-words.sum} %
 }
 
@@ -47,6 +72,7 @@
 }
 
 % UoB declaration
+% TODO: add params to this
 \newcommand{\makedecl}{
   \newpage
   \thispagestyle{plain}
