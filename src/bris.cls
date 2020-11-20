@@ -26,6 +26,9 @@
 
 %% INTERNAL STUFF
 
+\setsecnumdepth{subsection}
+\setcounter{tocdepth}{2}
+
 \renewcommand{\lstlistlistingname}{List of Listings}
 
 \setulmarginsandblock{2cm}{2cm}{*}
