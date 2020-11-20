@@ -1,18 +1,20 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{bris}[Liam Dalgarno]
-\LoadClass[11pt,twoside]{book}
+\LoadClass[a4paper,11pt,twoside]{memoir}
 
 %% PACKAGE IMPORTS
 
 \RequirePackage[algochapter]{algorithm2e}
 \RequirePackage{amsmath}
 \RequirePackage{fancyhdr}
-\RequirePackage{geometry}
 \RequirePackage{graphicx}
 \RequirePackage{hyperref}
 \RequirePackage{import}
 \RequirePackage{listings}
+\RequirePackage{lipsum}
 \RequirePackage{siunitx}
+\RequirePackage{titlesec}
+\RequirePackage{xcolor}
 
 %% USER SETTINGS
 
@@ -24,51 +26,49 @@
 
 %% INTERNAL STUFF
 
-\pagestyle{plain}
-\geometry{a4paper, margin=2cm}
+\renewcommand{\lstlistlistingname}{List of Listings}
 
-\fancypagestyle{plain}{
-  \fancyhf{}
+\setulmarginsandblock{2cm}{2cm}{*}
+\setlrmarginsandblock{2cm}{2cm}{*}
+\checkandfixthelayout
 
-  \renewcommand{\headrulewidth}{0.5pt}
-  \renewcommand{\footrulewidth}{0.5pt}
-
-  \fancyfoot[C]{\thepage}
+% make chapter centralised
+\makechapterstyle{centrechap}{%
+  \renewcommand{\chapterheadstart}{\vspace*{\beforechapskip}}
+  \renewcommand{\chapnamefont}{\normalfont\Huge\bfseries}
+  \renewcommand{\chapnumfont}{\normalfont\Huge\bfseries}
+  \renewcommand{\chaptername}{\centering Chapter}
+  \renewcommand{\printchapternum}{\chapnumfont \thechapter:}
+  \renewcommand{\afterchapternum}{}
+  \renewcommand{\chaptitlefont}{\normalfont\Huge\bfseries}
+  \renewcommand\printchaptertitle[1]{
+    \chaptitlefont##1
+  }
+  \renewcommand\printchapternonum[1]{
+    \chaptitlefont\centering##1
+  }
+  \setlength{\beforechapskip}{-\baselineskip}
+  \setlength{\midchapskip}{0pt}
+  \setlength{\afterchapskip}{3em}
 }
+\chapterstyle{centrechap}
 
-\fancypagestyle{marked}{
-  \fancyhf{}
+% add rule to head/foot
+\makepagestyle{ruledplain}
+\makeevenhead{ruledplain}{\normalfont\textit{\leftmark}}{}{\normalfont\textit{\rightmark}}
+\makeoddhead{ruledplain}{\normalfont\textit{\rightmark}}{}{\normalfont\textit{\leftmark}}
+\makeevenfoot{ruledplain}{}{\normalfont\thepage}{}
+\makeoddfoot{ruledplain}{}{\normalfont\thepage}{}
+\makeheadrule{ruledplain}{\textwidth}{0.5pt}
+\makeevenfoot{plain}{}{\normalfont\thepage}{}
+\makeoddfoot{plain}{}{\normalfont\thepage}{}
 
-  \renewcommand{\headrulewidth}{0.5pt}
-  \renewcommand{\footrulewidth}{0.5pt}
-
-  \fancyhead[LO]{\slshape \rightmark}
-  \fancyhead[RE]{\slshape  \leftmark}
-
-  \fancyfoot[C]{\thepage}
-}
+\pagestyle{ruledplain}
 
 % semi-accurate word counting
 \newcommand{\quickwordcount}[1]{%
   \immediate\write18{texcount -sum=1 -0 -q -merge #1.tex > #1-words.sum }%
   \input{#1-words.sum} %
-}
-
-% setup page numbering for each main section
-\renewcommand{\frontmatter}{
-  \pagestyle{empty}
-  \cleardoublepage
-  \pagestyle{plain}
-  \pagenumbering{roman}
-}
-\renewcommand{\mainmatter}{
-  \cleardoublepage
-  \pagestyle{marked}
-  \pagenumbering{arabic}
-}
-\renewcommand{\backmatter}{
-  \cleardoublepage
-  \pagestyle{marked}
 }
 
 % UoB declaration
@@ -93,37 +93,36 @@
 
 % nicely formatted title page
 \renewcommand{\maketitle}{
-  \newpage
-  \thispagestyle{empty}
+  \begin{titlingpage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge \brisTitle}
+      
+      \vspace*{8mm} 
+      {\Large By} \\ 
+      \vspace*{8mm}
+      {\Large\textsc{\brisName}} \\
+      
+      \vspace*{16mm}
+      \includegraphics[width=0.5\textwidth]{assets/bristollogo_colour}
+      \vspace*{16mm}
 
-  \vspace*{\fill}
-  \begin{center}
-    {\Huge \brisTitle}
-    
-    \vspace*{7.5mm} 
-    {\Large By} \\ 
-    \vspace*{7.5mm}
-    {\Large\textsc{\brisName}} \\
-    
-    \vspace*{15mm}
-    \includegraphics[width=0.5\textwidth]{assets/bristollogo_colour}
-    \vspace*{15mm}
+      {\Large\textsc{Department of \brisDepartment}}
+      \vspace*{16mm}
 
-    {\Large\textsc{Department of \brisDepartment}}
-    \vspace*{15mm}
+      \begin{minipage}{0.7\textwidth}
+      {\large A dissertation submitted to the University of Bristol in accordance with the requirements of the degree of \textsc{\brisDegree} in the Faculty of \brisFaculty.}
+      \end{minipage}
 
-    \begin{minipage}{0.7\textwidth}
-    {\large A dissertation submitted to the University of Bristol in accordance with the requirements of the degree of \textsc{\brisDegree} in the Faculty of \brisFaculty.}
-    \end{minipage}
+      \vspace*{8mm}
+      {\large\textsc{\today}}
+      \vspace*{8mm}
+    \end{center}
 
-    \vspace*{7.5mm}
-    {\large\textsc{\today}}
-    \vspace*{7.5mm}
-  \end{center}
+    \begin{flushright}
+    Word count: \quickwordcount{main}
+    \end{flushright}
 
-  \begin{flushright}
-  Word count: \quickwordcount{main}
-  \end{flushright}
-
-  \vspace*{\fill}
+    \vspace*{\fill}
+  \end{titlingpage}
 }

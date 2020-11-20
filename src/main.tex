@@ -2,6 +2,7 @@
 
 % for some reason texcount requires this here??
 \usepackage{import}
+%\usepackage[]{showframe}
 
 \brisName{Liam Dalgarno}
 \brisDepartment{Computer Science}
@@ -19,6 +20,7 @@ quantum gate set tomography}
 \maketitle
 
 \frontmatter
+%TC:ignore
 
 \makedecl
 
@@ -26,17 +28,23 @@ quantum gate set tomography}
 
 \import{frontmatter/}{acknowledgements.tex}
 
-\tableofcontents
-\addcontentsline{toc}{chapter}{\listfigurename}
-\listoffigures
-\addcontentsline{toc}{chapter}{\listtablename}
-\listoftables
-\addcontentsline{toc}{chapter}{\listalgorithmcfname}
-\listofalgorithms
-\lstlistoflistings
+\tableofcontents*
+\addtocontents{toc}{\par\nobreak\textbf{Section \hfill Page}\par\nobreak}
+\clearpage
 
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+%TC:endignore
 \mainmatter
 
 \import{chapters/introduction/}{introduction.tex}
+
+\clearpage
+
+\section{HELLO}
 
 \end{document}
