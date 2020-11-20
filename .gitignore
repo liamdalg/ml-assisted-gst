@@ -17,7 +17,6 @@
 *.cb2
 .*.lb
 *.sum
-src/*.pdf
 
 ## Intermediate documents:
 *.dvi
