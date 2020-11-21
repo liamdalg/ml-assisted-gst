@@ -4,6 +4,7 @@
 
 %% PACKAGE IMPORTS
 
+\RequirePackage[printonlyused]{acronym}
 \RequirePackage[algochapter]{algorithm2e}
 \RequirePackage{amsmath}
 \RequirePackage{fancyhdr}
