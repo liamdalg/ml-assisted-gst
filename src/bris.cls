@@ -7,6 +7,7 @@
 \RequirePackage[printonlyused]{acronym}
 \RequirePackage[algochapter]{algorithm2e}
 \RequirePackage{amsmath}
+\RequirePackage{caption}
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
 \RequirePackage{hyperref}

@@ -1,3 +1,49 @@
 \section{Tomography}
 
-Test commit from overleaf.
+Notes taken from \cite{nielsen_quantum_2011}, only reworded and trimmed down for my benefit.
+%% TODO: Clean up these notes at a later date to go in the introduction sections
+
+In the classical world, characterising the dynamics of a system is trivial and known as
+\textit{system identification}. The general idea is that we wish to know how the system behaves with
+respect to any input, thus uniquely identifying it. In the quantum world, the analogue of this is
+called \textit{quantum process tomography}. To understand process tomography, we must first
+understand \textit{quantum state tomography}.
+
+State tomography is the procedure of determining an unknown quantum state. This is harder than it
+sounds: if we're given an unknown state $\rho$, we can't just measure the state and recover it
+immediately way since measurement will \textit{disturb} the original state. In fact, \textit{there
+is no quantum measurement which can distinguish non-orthogonal states with certainty}. However, if
+we have an \textit{ensemble} of the same quantum state $\rho$, then it's possible to estimate
+$\rho$.
+
+If we represent the state of the system using its density matrix $\rho$, we may expand $\rho$ as
+\begin{equation}
+    \rho = \frac{\tr{\rho}I + \tr{X\rho}X + \tr{Y\rho}Y + \tr{Z\rho}Z}
+                {2}
+\end{equation}
+
+Note that $\tr{Z\rho}$ can be interpreted as the \textit{expectation} of the observable $Z$.
+Therefore, to estimate $\tr{Z\rho}$, we measure the observable $Z$ $m$-times to obtain outcomes
+$z_1, \dots, z_m$ and calculate
+\begin{equation}
+    \tr{Z\rho} \approx \frac{1}{m} \sum_i^m z_i
+\end{equation}
+In general, this estimate is approximately a Gaussian with mean $\tr{Z\rho}$ and standard deviation
+$\Delta(Z) / \sqrt{m}$, where $\Delta(Z)$ is the standard deviation of a single measurement. We can
+apply this same method to estimate $\tr{X\rho}X$ and $\tr{Y\rho}Y$; with a large enough sample size
+we obtain a good estimate for $\rho$. Additionally, since density matrices have unit trace, we know
+that
+\begin{equation}
+    \tr{\rho} I = I
+\end{equation}
+This process can be generalised to a density matrix on $n$ qubits as
+\begin{equation}
+    \rho = \sum_{\vec{v}} \frac{\tr{\sigma_{v_1} \otimes \sigma_{v_2} \otimes \dots \otimes \sigma_{v_n}} \sigma_{v_1} \otimes \sigma_{v_2} \otimes \dots \otimes \sigma_{v_n}}{2^n}
+\end{equation}
+where $\vec{v} = \left(v_1, \dots, v_n\right)$ with entries $v_i$ chosen from the set $0, 1, 2, 3$,
+i.e. each $\sigma_{v_i}$ is a particular Pauli matrix.
+
+% TODO: look over this and possibly get an example? I get kind of what its doing but a concrete
+% example would help
+
+
