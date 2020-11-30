@@ -1,5 +1,7 @@
 \section{Tomography}
 
+\subsection{State Tomography}
+
 Notes taken from \cite{nielsen_quantum_2011}, only reworded and trimmed down for my benefit.
 %% TODO: Clean up these notes at a later date to go in the introduction sections
 
@@ -46,4 +48,22 @@ i.e. each $\sigma_{v_i}$ is a particular Pauli matrix.
 % TODO: look over this and possibly get an example? I get kind of what its doing but a concrete
 % example would help
 
+\subsection{Process Tomography}
 
+To extend this notion to quantum process tomography is actually quite easy from a theoretical point
+of view. If the state space of the system has $d$ dimensions ($d = 2$ for a single qubit), then we
+choose $d^2$ pure quantum states $\ket{\psi_d}, \dots, \ket{\psi_{d^2}}$. The corresponding density
+matrices $\ketbra{\psi_1}{\psi_1}, \dots, \ketbra{\psi_{d^2}}{\psi_{d^2}}$ for these states should
+form a \textit{basis set} for the space of possible density matrices. 
+
+Now, for each state $\ket{\psi_j}$, we prepare the system in that state and then subject it to the
+process $\mathcal{E}(\ketbra{\psi_j}{\psi_j})$. Afterwards, we use state tomography to determine the
+output state $\mathcal{E}(\ketbra{\psi_j}{\psi_j}$. Theoretically, this is all that we need to do,
+since the matrices $\ketbra{\psi_j}{\psi_j}$ form a basis set, so any other possible density
+matrices can be represented as a linear combination of the basis set. e.g.,
+\begin{equation}
+    \mathcal{E}(\ketbra{\Phi}{\Phi} + \ketbra{\Psi}{\Psi}) = 
+    \mathcal{E}(\ketbra{\Phi}{\Phi}) + \mathcal{E}(\ketbra{\Psi}{\Psi})
+\end{equation}
+However, in reality we need to determine $\mathcal{E}$ from experimental data: operators are just a
+theoretical tool, whereas experiments involve real numbers.

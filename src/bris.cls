@@ -7,6 +7,7 @@
 \RequirePackage[printonlyused]{acronym}
 \RequirePackage[algochapter]{algorithm2e}
 \RequirePackage{amsmath}
+\RequirePackage{braket}
 \RequirePackage{caption}
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
@@ -119,7 +120,7 @@
       {\large A dissertation submitted to the University of Bristol in accordance with the requirements of the degree of \textsc{\brisDegree} in the Faculty of \brisFaculty.}
       \end{minipage}
 
-      \vspace*{8mm}
+      \vspace*{16mm}
       {\large\textsc{\today}}
       \vspace*{8mm}
     \end{center}
