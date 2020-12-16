@@ -1,0 +1,2 @@
+@BIBINPUTS=(".");
+@TEXINPUTS=(".");
