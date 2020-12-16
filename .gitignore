@@ -338,7 +338,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+build/*
 develop-eggs/
 dist/
 downloads/
@@ -475,3 +475,6 @@ dmypy.json
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/latex,vscode,python,matlab
+
+# include main build 
+!build/main.pdf
