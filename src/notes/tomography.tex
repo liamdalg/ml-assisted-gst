@@ -1,9 +1,31 @@
 \section{Tomography}
 
-\subsection{State Tomography}
-
 Notes taken from \cite{nielsen_quantum_2011}, only reworded and trimmed down for my benefit.
 %% TODO: Clean up these notes at a later date to go in the introduction sections
+
+\subsection{Operator-Sum Representation} % Chapter 8.2.3
+
+Quantum operations can be represented in the \textit{operator-sum representation}. Consider a state
+$\rho$ coupled with the environment $\rho_{\text{env}}$ which is transformed by $U$. The final state
+$\mathcal{E}(\rho)$ of the system is then
+\begin{equation}
+    \mathcal{E}(\rho) = \tr[\text{env}]{U (\rho \otimes \rho_{\text{env}}) U^{\dagger}}
+\end{equation}
+where we trace out the environment to obtain the state of the system alone. To rewrite this in
+operator form, we let $\rho_\text{env}$ be a pure state $\ketbra{e_0}{e_0}$ with orthonormal basis
+$\ket{e_k}$. Then, we have
+\begin{align}
+    \mathcal{E}(\rho) &= \sum_k \bra{e_k} U \Big[\rho \otimes \ketbra{e_0}{e_0}\Big] U^{\dagger} \ket{e_k} \\
+                      &= \sum_k E_k \rho E_k^{\dagger}
+\end{align}
+
+Where $E_k = \braket{e_k | U | e_0}$, and we omit the identities in $I \otimes \ket{e_k}$. See
+\href{https://physics.stackexchange.com/questions/276053/trouble-with-operator-sum-representation-of-a-quantum-operation}{this
+answer for why}. THIS NEEDS EXPLAINING IN FULL IN DISSERTATION. The operators $E_k$ are known as
+\textit{operation elements}. This form is incredibly useful for tomography, which is covered in the
+following sections.
+
+\subsection{State Tomography}
 
 In the classical world, characterising the dynamics of a system is trivial and known as
 \textit{system identification}. The general idea is that we wish to know how the system behaves with
@@ -23,7 +45,6 @@ If we represent the state of the system using its density matrix $\rho$, we may 
     \rho = \frac{\tr{\rho}I + \tr{X\rho}X + \tr{Y\rho}Y + \tr{Z\rho}Z}
                 {2}
 \end{equation}
-
 Note that $\tr{Z\rho}$ can be interpreted as the \textit{expectation} of the observable $Z$.
 Therefore, to estimate $\tr{Z\rho}$, we measure the observable $Z$ $m$-times to obtain outcomes
 $z_1, \dots, z_m$ and calculate
@@ -57,13 +78,36 @@ matrices $\ketbra{\psi_1}{\psi_1}, \dots, \ketbra{\psi_{d^2}}{\psi_{d^2}}$ for t
 form a \textit{basis set} for the space of possible density matrices. 
 
 Now, for each state $\ket{\psi_j}$, we prepare the system in that state and then subject it to the
-process $\mathcal{E}(\ketbra{\psi_j}{\psi_j})$. Afterwards, we use state tomography to determine the
-output state $\mathcal{E}(\ketbra{\psi_j}{\psi_j})$. Theoretically, this is all that we need to do,
-since the matrices $\ketbra{\psi_j}{\psi_j}$ form a basis set, so any other possible density
-matrices can be represented as a linear combination of the basis set. e.g.,
+process $\mathcal{E}$. Afterwards, we use state tomography to determine the output state
+$\mathcal{E}(\ketbra{\psi_j}{\psi_j})$. Theoretically, this is all that we need to do, since the
+matrices $\ketbra{\psi_j}{\psi_j}$ form a basis set, so any other possible density matrices can be
+represented as a linear combination of the basis set. e.g.,
 \begin{equation}
     \mathcal{E}(\ketbra{\Phi}{\Phi} + \ketbra{\Psi}{\Psi}) = 
     \mathcal{E}(\ketbra{\Phi}{\Phi}) + \mathcal{E}(\ketbra{\Psi}{\Psi})
 \end{equation}
-However, in reality we need to determine $\mathcal{E}$ from experimental data: operators are just a
-theoretical tool, whereas experiments involve real numbers.
+Our goal is to determine a set of operation elements $\{E_i\}$ for $\mathcal{E}$,
+\begin{equation} \label{eq:operation_elements}
+    \mathcal{E}(\rho) = \sum_i E_i \rho E_i^{\dagger} 
+\end{equation}
+However, recall that operators are just a `theoretical tool', so obtaining these exact operators is
+not possible. We must determine $E_i$ from \textit{measurable} parameters. In this regard, it is
+convenient to use a different formulation of $\mathcal{E}$ from a \textit{fixed} set of operators
+$\tilde{E}_i$. These fixed operators will form a basis set for the operators of that state space, so
+that
+\begin{equation}
+    E_i = \sum_m e_{im} \tilde{E}_m
+\end{equation}
+for some set of complex numbers $e_{im}$. 
+
+We can rewrite Equation \ref{eq:operation_elements} as
+\begin{equation}
+    \mathcal{E}(\rho) = \sum_{mn} \tilde{E}_m \rho \tilde{E}_n^{\dagger} \chi_{mn}
+\end{equation}
+where each $\tilde{E}_i$ is a fixed operator, and $\chi$ is a complex matrix known as the
+\textit{chi matrix representation}. $\chi$ is defined as
+\begin{equation}
+    \chi_{mn} = \sum_i e_{im} e_{in}^*
+\end{equation}
+This shows that we can determine $\mathcal{E}$ entirely from $\chi$, once the set of operators has
+been fixed.
