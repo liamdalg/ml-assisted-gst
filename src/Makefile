@@ -7,6 +7,6 @@ build:
 	openout_any=a latexmk ${BUILD_ARGS} ${ROOT_FILE}
 
 clean:
-	@cd ${OUT_DIR} && rm -f ./*.{fls,fdb_latexmk,synctex.gz,aux,bbl,blg,loa,lof,log,lol,lot,nav,out,snm,toc}
+	@rm -f ${OUT_DIR}/*.{fls,fdb_latexmk,synctex.gz,aux,bbl,blg,loa,lof,log,lol,lot,nav,out,snm,toc}
 
 .DEFAULT_GOAL := build
