@@ -17,6 +17,7 @@
 \RequirePackage{lipsum}
 \RequirePackage{siunitx}
 \RequirePackage{titlesec}
+\RequirePackage{todonotes}
 \RequirePackage{xcolor}
 
 %% USER SETTINGS
