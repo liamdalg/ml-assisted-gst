@@ -4,21 +4,7 @@
 
 %% PACKAGE IMPORTS
 
-\RequirePackage[printonlyused]{acronym}
-\RequirePackage[algochapter]{algorithm2e}
-\RequirePackage{amsmath}
-\RequirePackage{braket}
-\RequirePackage{caption}
-\RequirePackage{fancyhdr}
-\RequirePackage{graphicx}
-\RequirePackage{hyperref}
-\RequirePackage{import}
-\RequirePackage{listings}
-\RequirePackage{lipsum}
-\RequirePackage{siunitx}
-\RequirePackage{titlesec}
-\RequirePackage{todonotes}
-\RequirePackage{xcolor}
+
 
 %% USER SETTINGS
 
@@ -32,8 +18,6 @@
 
 \setsecnumdepth{subsection}
 \setcounter{tocdepth}{2}
-
-\renewcommand{\lstlistlistingname}{List of Listings}
 
 \setulmarginsandblock{2cm}{2cm}{*}
 \setlrmarginsandblock{2cm}{2cm}{*}
