@@ -86,22 +86,21 @@ represented as a linear combination of the basis set. e.g.,
     \mathcal{E}(\ketbra{\Phi}{\Phi} + \ketbra{\Psi}{\Psi}) = 
     \mathcal{E}(\ketbra{\Phi}{\Phi}) + \mathcal{E}(\ketbra{\Psi}{\Psi})
 \end{equation}
-Our goal is to determine a set of operation elements $\{E_i\}$ for $\mathcal{E}$,
+However, in practice, it's not that simple since operators are just a `theoretical tool'. We only
+have access to measureable quantities. We can instead describe $\mathcal{E}$ using
+\textit{operator-sum representation}, where our goal is to determine a set of operation elements
+$\{E_i\}$ for $\mathcal{E}$,
 \begin{equation} \label{eq:operation_elements}
     \mathcal{E}(\rho) = \sum_i E_i \rho E_i^{\dagger} 
 \end{equation}
-However, recall that operators are just a `theoretical tool', so obtaining these exact operators is
-not possible. We must determine $E_i$ from \textit{measurable} parameters. In this regard, it is
-convenient to use a different formulation of $\mathcal{E}$ from a \textit{fixed} set of operators
-$\tilde{E}_i$. These fixed operators will form a basis set for the operators of that state space, so
-that
+To obtain these operators from measurements, it is convenient to use a different formulation of
+$\mathcal{E}$ from a \textit{fixed} set of operators $\tilde{E}_i$. These fixed operators will form
+a basis set for the operators of that state space, so that
 \begin{equation}
     E_i = \sum_m e_{im} \tilde{E}_m
 \end{equation}
-for some set of complex numbers $e_{im}$. 
-
-We can rewrite Equation \ref{eq:operation_elements} as
-\begin{equation}
+for some set of complex numbers $e_{im}$. We can rewrite Equation \ref{eq:operation_elements} as
+\begin{equation} \label{eq:chi_matrix_representation}
     \mathcal{E}(\rho) = \sum_{mn} \tilde{E}_m \rho \tilde{E}_n^{\dagger} \chi_{mn}
 \end{equation}
 where each $\tilde{E}_i$ is a fixed operator, and $\chi$ is a complex matrix known as the
@@ -109,5 +108,28 @@ where each $\tilde{E}_i$ is a fixed operator, and $\chi$ is a complex matrix kno
 \begin{equation}
     \chi_{mn} = \sum_i e_{im} e_{in}^*
 \end{equation}
-This shows that we can determine $\mathcal{E}$ entirely from $\chi$, once the set of operators has
-been fixed.
+Here, we have simply combined the complex numbers $e_{im}$ into a single matrix. This shows that we
+can determine $\mathcal{E}$ entirely from $\chi$, once the set of operators has been fixed. 
+
+Now, let $p_j, 1 \le j \le d^2$ be a set of matrices which form an independent basis for the the
+space of $d \times d$ matrices. We can determine each $\mathcal{E}(\rho_j)$ by state tomography, and
+then express this as a linear combination of the basis states,
+\begin{equation}
+    \mathcal{E}(\rho_j) = \sum_k \lambda_{jk} \rho_k
+\end{equation}
+Since we know $\mathcal{E}(\rho_j)$, we can determine $\rho_{jk}$ by linear algebra. Furthermore, we
+can write this as
+\begin{equation}
+    \tilde{E}_m \rho_j \tilde{E}_n^{\dagger} = \sum_k \beta_{jk}^{mn} \rho_k
+\end{equation}
+where $\beta_{jk}^{mn}$ are complex numbers determined by standard linear algebra algorithms given
+the operators $\tilde{E}_m$ and $\rho_j$. If we combine these two with Equation
+\ref{eq:chi_matrix_representation}, we get
+\begin{equation}
+    \sum_k \sum_{mn} \chi_{mn} \beta_{jk}^{mn} \rho_k = \sum_k \lambda_{jk} \rho_k
+\end{equation}
+From the linear independence of $\rho_k$, it follows that
+\begin{equation}
+    \sum_{mn} \beta_{jk}^{mn} \chi_{mn} = \lambda_{jk}
+\end{equation}
+\todoin{This last part is copied almost word-for-word from the book. Clean it up later}
