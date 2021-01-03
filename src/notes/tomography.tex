@@ -143,6 +143,10 @@ inverse $\kappa$. $\chi$ is then completely defined by
 \begin{equation}
     \chi_{mn} = \sum_{jk} \kappa_{jk}^{mn} \lambda_{jk}
 \end{equation}
+Which we can write more clearly in matrix form as
+\begin{equation}
+    \vec{\chi} = \kappa \vec{\lambda}
+\end{equation}
 Fortunately, once we know $\chi$, we immediately know the operator-sum representation of
 $\mathcal{E}$. Suppose that some unitary matrix $U^{\dagger}$ diagonalises $\chi$. Then, we can
 construct $E_i$ using
@@ -150,7 +154,29 @@ construct $E_i$ using
     \chi_{mn} &= \sum_{xy} U_{mx} d_x \delta_{xy} U^*_{ny} \\
     E_i &= \sqrt{d_i} \sum_j U_{ji} \tilde{E}_j
 \end{align}
+In summary: $\lambda$ is determined using state tomography, which then determines $\chi$ via
+$\vec{\chi} = \kappa \vec{\lambda}$. We can then use $\chi$ to completely determine each $E_i$.
 \todoin{The book has proof for this, is it necessary to include?}
-\todoin{This makes little sense to me, is explanation needed or just the final result?}
+\todoin{This last part makes little sense to me, is explanation needed or just the final result?}
 
+In general $\chi$ will contain $d^4 - d^2$ independent parameters. A linear map from $d \times d$
+complex matrices to $d \times d$ matrices is described by $d^4$ independent parameters. $d^2$ comes
+from the constraint that $\rho$ must remain Hermitian with unit trace. For a single qubit, we'll
+have $2^4 - 2^2 = 12$ parameters, whilst two qubits will have $4^4 - 4^2 = 240$ parameters!  
 
+The above process looks pretty complex. Fortunately, in the case of a single qubit, we can pick
+specific fixed operators $\tilde{E}_i$ to simplify the process massively. We select
+\begin{align}
+    \tilde{E}_0 &= I \\
+    \tilde{E}_1 &= X \\
+    \tilde{E}_2 &= -iY \\
+    \tilde{E}_3 &= Z \\
+\end{align}
+For our basis set $\rho_j$, we can prepare the input states $\ket{0}, \ket{1}, \ket{+} = (\ket{0} +
+\ket{1}) / \sqrt{2}, \ket{-}= (\ket{0} + i\ket{1}) / \sqrt{2}$. This allows us to determine
+\begin{align}
+    \rho_1' &= \mathcal{E}(\ketbra{0}{0}) \\
+    \rho_4' &= \mathcal{E}(\ketbra{1}{1}) \\
+    \rho_2' &= \mathcal{E}(\ketbra{1}{0}) = \mathcal{E}(\ketbra{+}{+}) - i\mathcal{E}(\ketbra{-}{-}) - (1 - i)(\rho_1' + \rho_4') / 2 \\
+    \rho_3' &= \mathcal{E}(\ketbra{0}{1}) = \mathcal{E}(\ketbra{+}{+}) + i\mathcal{E}(\ketbra{-}{-}) - (1 + i)(\rho_1' + \rho_4') / 2
+\end{align}
