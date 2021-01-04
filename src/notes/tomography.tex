@@ -108,8 +108,9 @@ where each $\tilde{E}_i$ is a fixed operator, and $\chi$ is a complex matrix kno
 \begin{equation}
     \chi_{mn} = \sum_i e_{im} e_{in}^*
 \end{equation}
-Here, we have simply combined the complex numbers $e_{im}$ into a single matrix. This shows that we
-can determine $\mathcal{E}$ entirely from $\chi$, once the set of operators has been fixed. 
+Here, we have simply combined the complex numbers $e_{im}$ into a single matrix. By definition, this
+is a positive Hermitian matrix. This shows that we can determine $\mathcal{E}$ entirely from $\chi$,
+once the set of operators has been fixed. 
 
 Now, let $p_j, 1 \le j \le d^2$ be a set of matrices which form an independent basis for the the
 space of $d \times d$ matrices. We can determine each $\mathcal{E}(\rho_j)$ by state tomography, and
@@ -124,9 +125,9 @@ to solve standard linear equations for each $\lambda_{jk}$. Furthermore, we can 
     \tilde{E}_m \rho_j \tilde{E}_n^{\dagger} = \sum_k \beta_{jk}^{mn} \rho_k
 \end{equation}
 where $\beta_{jk}^{mn}$ are complex numbers determined by standard linear algebra algorithms given
-the operators $\tilde{E}_m$, $\tilde{E}_n$, and $\rho_j$. Note that the $m$ and $n$ come from the fixed operators in
-Equation \ref{eq:chi_matrix_representation}. If we combine the previous two equations with Equation
-\ref{eq:chi_matrix_representation}, we get
+the operators $\tilde{E}_m$, $\tilde{E}_n$, and $\rho_j$. Note that the $m$ and $n$ come from the
+fixed operators in Equation \ref{eq:chi_matrix_representation}. If we combine the previous two
+equations with Equation \ref{eq:chi_matrix_representation}, we get
 \begin{equation}
     \sum_k \sum_{mn} \chi_{mn} \beta_{jk}^{mn} \rho_k = \sum_k \lambda_{jk} \rho_k
 \end{equation}
@@ -156,8 +157,6 @@ construct $E_i$ using
 \end{align}
 In summary: $\lambda$ is determined using state tomography, which then determines $\chi$ via
 $\vec{\chi} = \kappa \vec{\lambda}$. We can then use $\chi$ to completely determine each $E_i$.
-\todoin{The book has proof for this, is it necessary to include?}
-\todoin{This last part makes little sense to me, is explanation needed or just the final result?}
 
 In general $\chi$ will contain $d^4 - d^2$ independent parameters. A linear map from $d \times d$
 complex matrices to $d \times d$ matrices is described by $d^4$ independent parameters. $d^2$ comes
