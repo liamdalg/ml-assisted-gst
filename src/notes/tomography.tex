@@ -169,13 +169,15 @@ specific fixed operators $\tilde{E}_i$ to simplify the process massively. We sel
     \tilde{E}_0 &= I \\
     \tilde{E}_1 &= X \\
     \tilde{E}_2 &= -iY \\
-    \tilde{E}_3 &= Z \\
+    \tilde{E}_3 &= Z
 \end{align}
 For our basis set $\rho_j$, we can prepare the input states $\ket{0}, \ket{1}, \ket{+} = (\ket{0} +
-\ket{1}) / \sqrt{2}, \ket{-}= (\ket{0} + i\ket{1}) / \sqrt{2}$. This allows us to determine
+\ket{1}) / \sqrt{2}, \ket{-}= (\ket{0} + i\ket{1}) / \sqrt{2}$. We determine
 \begin{align}
     \rho_1' &= \mathcal{E}(\ketbra{0}{0}) \\
     \rho_4' &= \mathcal{E}(\ketbra{1}{1}) \\
     \rho_2' &= \mathcal{E}(\ketbra{1}{0}) = \mathcal{E}(\ketbra{+}{+}) - i\mathcal{E}(\ketbra{-}{-}) - (1 - i)(\rho_1' + \rho_4') / 2 \\
     \rho_3' &= \mathcal{E}(\ketbra{0}{1}) = \mathcal{E}(\ketbra{+}{+}) + i\mathcal{E}(\ketbra{-}{-}) - (1 + i)(\rho_1' + \rho_4') / 2
 \end{align}
+because $\ketbra{0}{0}, \ketbra{1}{1}, \ketbra{1}{0}, \ketbra{0}{1}$ form a basis for the set of $d
+\times d$ matrices.
