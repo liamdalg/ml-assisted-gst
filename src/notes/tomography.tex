@@ -54,12 +54,8 @@ $z_1, \dots, z_m$ and calculate
 In general, this estimate is approximately a Gaussian with mean $\tr{Z\rho}$ and standard deviation
 $\Delta(Z) / \sqrt{m}$, where $\Delta(Z)$ is the standard deviation of a single measurement. We can
 apply this same method to estimate $\tr{X\rho}X$ and $\tr{Y\rho}Y$; with a large enough sample size
-we obtain a good estimate for $\rho$. Additionally, since density matrices have unit trace, we know
-that
-\begin{equation}
-    \tr{\rho} I = I
-\end{equation}
-This process can be generalised to a density matrix on $n$ qubits as
+we obtain a good estimate for $\rho$. This process can be generalised to a density matrix on $n$
+qubits to
 \begin{equation}
     \rho = \sum_{\vec{v}} \frac{\tr{\sigma_{v_1} \otimes \sigma_{v_2} \otimes \dots \otimes \sigma_{v_n}} \sigma_{v_1} \otimes \sigma_{v_2} \otimes \dots \otimes \sigma_{v_n}}{2^n}
 \end{equation}
@@ -120,7 +116,8 @@ then express this as a linear combination of the basis states,
 \end{equation}
 Since we know $\mathcal{E}(\rho_j)$ via state tomography, we can determine $\lambda_{jk}$ by linear
 algebra. i.e. $\mathcal{E}(\rho_j)$ is a known matrix and each $\rho_k$ is known, so we simply need
-to solve standard linear equations for each $\lambda_{jk}$. Furthermore, we can write this as
+to solve standard linear equations for each $\lambda_{jk}$. Furthermore, we can construct a matrix
+$\beta_{mn}$ from the fixed operators $\tilde{E}_m$ as follows
 \begin{equation}
     \tilde{E}_m \rho_j \tilde{E}_n^{\dagger} = \sum_k \beta_{jk}^{mn} \rho_k
 \end{equation}
