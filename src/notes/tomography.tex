@@ -177,4 +177,20 @@ For our basis set $\rho_j$, we can prepare the input states $\ket{0}, \ket{1}, \
     \rho_3' &= \mathcal{E}(\ketbra{0}{1}) = \mathcal{E}(\ketbra{+}{+}) + i\mathcal{E}(\ketbra{-}{-}) - (1 + i)(\rho_1' + \rho_4') / 2
 \end{align}
 because $\ketbra{0}{0}, \ketbra{1}{1}, \ketbra{1}{0}, \ketbra{0}{1}$ form a basis for the set of $d
-\times d$ matrices.
+\times d$ matrices. This particular choice of basis allows us to represent $\beta$ as the Kronecker
+product $\beta = \Lambda \otimes \Lambda$ and $\chi$ in terms of block matrices:
+\begin{gather}
+    \Lambda = \frac{1}{2}
+    \begin{bmatrix}
+        I & X  \\
+        X & -I
+    \end{bmatrix} \\
+    \chi = \Lambda 
+    \begin{bmatrix}
+        p_1' & p_2' \\
+        p_3' & p_4'
+    \end{bmatrix} \Lambda
+\end{gather}
+\todoin{Refine all of this down for the background chapter, because we're mostly interested in the 
+single qubit case.}
+\todoin{Figure out why $\beta = \Lambda \otimes \Lambda$ gives that equation for $\chi$.}
