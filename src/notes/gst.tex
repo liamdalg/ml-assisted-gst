@@ -1,0 +1,42 @@
+\section{Gate Set Tomography}
+
+Notes taken from \cite{nielsen_gate_2020}.
+
+\noindent \ac{GST} differs from state and process tomography in that:
+\begin{itemize}
+    \item It is almost entirely calibration-free. It does not depend upon a prior description of the
+    measurements used (as in state tomography) or the states that can be prepared (as in process
+    tomography). \textit{These are called ``reference frame'' operations in the literature?}
+    \item It estimates an entire set of logic operations, rather than a single one.
+\end{itemize}
+
+\ac{GST} being calibration-free is incredibly important. Both state and process tomography are
+limited in that they rely on \textit{accurate} characterisation of their ``reference frame''
+operations. Typically, they're either unknown or misidentified.
+
+\subsection{Mathematical Background}
+
+% The important part for me :(
+
+GST uses the \textit{Hilbert-Schmidt space}. The \textit{Hilbert-Schmidt space} is the complex
+$d^2$-dimensional vector space of $d \times d$ matrices. We're interested in the $d^2$-dimensional
+subspace of Hermitian matrices, denoted $\mathcal{B(H)}$. The basis we use for $\mathcal{B(H)}$ is
+the set of normalised Pauli matrices $\{ \mathbb{I} / \sqrt{2}, \sigma_x / \sqrt{2}, \sigma_y /
+\sqrt{2}, \sigma_z / \sqrt{2} \}$. Note that since both states and effects are both Hermitian, we
+can in fact represent states and effect in the $d^2$-dimensional real subspace of $\mathcal{B(H)}$.
+Therefore, any reference to $\mathcal{B(H)}$ is referring to the real subspace.
+
+Elements of $\mathcal{B(H)}$ are represented using an `extension' of Dirac's bra-ket notation called
+\textit{super bra-ket notation}. Some element $B$ is represented as a column vector $\superket{B}$,
+and an element of its dual space by a row vector $\superbra{A}$. Everything works similarly to
+regular Dirac notation, the main difference is that we can represent everything as vectors in
+$\mathcal{B(H)}$ rather than the usual matrices.
+
+Measurement of a quantum system yields an outcome from a set of $k$ possibilities. Therefore, the
+$i$th outcome can be represented by a dual vector $\superbra{E_i}$, so that $\Pr(i | \rho) =
+\superbraket{E_i | \rho} = \tr{E_i \rho}$. Since they represent probabilities, we require that $E_i
+\ge 0$ and $\sum_i E_i = \mathbb{I}$. The $E_i$ are called \textit{effects}, and the set $\{E_i \}$
+is called a \ac{POVM}.
+
+
+
