@@ -18,13 +18,19 @@ operations. Typically, they're either unknown or misidentified.
 
 % The important part for me :(
 
-GST uses the \textit{Hilbert-Schmidt space}. The \textit{Hilbert-Schmidt space} is the complex
+A quantum system is described by a $d$-dimensional \textit{Hilbert space} $\mathcal{H} =
+\mathbb{C}^d$, where $d$ is the largest number of outcomes of a repeatable measurement. For a qubit,
+$d = 2$. GST uses the \textit{Hilbert-Schmidt space}. The Hilbert-Schmidt space is the complex
 $d^2$-dimensional vector space of $d \times d$ matrices. We're interested in the $d^2$-dimensional
 subspace of Hermitian matrices, denoted $\mathcal{B(H)}$. The basis we use for $\mathcal{B(H)}$ is
 the set of normalised Pauli matrices $\{ \mathbb{I} / \sqrt{2}, \sigma_x / \sqrt{2}, \sigma_y /
-\sqrt{2}, \sigma_z / \sqrt{2} \}$. Note that since both states and effects are both Hermitian, we
-can in fact represent states and effect in the $d^2$-dimensional real subspace of $\mathcal{B(H)}$.
-Therefore, any reference to $\mathcal{B(H)}$ is referring to the real subspace.
+\sqrt{2}, \sigma_z / \sqrt{2} \}$. This basis has the following properties:
+\begin{itemize}
+    \item Hermicity: $B_i = B_i^{\dagger}$
+    \item Orthonormality: $\tr{B_i B_j} = \delta_{ij}$
+    \item Traceless for $i > 0$: $B_0 = \mathbb{I} / \sqrt{d}$ and $\tr{B_i} = 0 \enspace \forall{i}
+    > 0$.
+\end{itemize}
 
 Elements of $\mathcal{B(H)}$ are represented using an `extension' of Dirac's bra-ket notation called
 \textit{super bra-ket notation}. Some element $B$ is represented as a column vector $\superket{B}$,
@@ -36,7 +42,57 @@ Measurement of a quantum system yields an outcome from a set of $k$ possibilitie
 $i$th outcome can be represented by a dual vector $\superbra{E_i}$, so that $\Pr(i | \rho) =
 \superbraket{E_i | \rho} = \tr{E_i \rho}$. Since they represent probabilities, we require that $E_i
 \ge 0$ and $\sum_i E_i = \mathbb{I}$. The $E_i$ are called \textit{effects}, and the set $\{E_i \}$
-is called a \ac{POVM}.
+is called a \ac{POVM}.  Note that since both states and effects are both Hermitian, we can in fact
+represent them in the $d^2$-dimensional real subspace of $\mathcal{B(H)}$. Therefore, any reference
+to $\mathcal{B(H)}$ is referring to the real subspace.
 
+\subsection{Quantum Logic Gates}
 
+An \textit{ideal} quantum logic gate is \textit{reversible} and corresponds to a unitary transform
+of $\mathcal{H}$. Such a gate would transform $\rho$ as $\rho \to U \rho U^{\dagger}$ for some
+unitary matrix $U$. This is a linear transformation from $\mathcal{B(H)}$ to itself; the linear
+transformation $\rho \to U \rho U^{\dagger}$ is called a \textit{superoperator}. In reality, logic
+gates are not perfectly reversible. These superoperators are known as quantum processes or quantum
+channels. We can represent any superoperator $\Lambda$ as a $d^2 \times d^2$ matrix, which acts on
+$\superket{\rho} \in \mathcal{B(H)}$ by left multiplication. This representation is called the
+\textit{transfer matrix} of $\Lambda$, and is denoted by $S_{\Lambda}$. Thus,
+\begin{equation}
+    \Lambda : \superket{\rho} \mapsto S_{\Lambda} \superket{\rho}
+\end{equation}
+If $\Lambda$ is performed on some input state $\rho$, then the probability of outcome $E_i$ is
+therefore
+\begin{equation}
+    p_i = \superbraket{E_i | S_{\Lambda} | \rho} = \tr{E_i S_{\Lambda} \rho}
+\end{equation}
 
+Not all superoperators describe physically allowed operations. To be physically possible, they must
+be:
+\begin{itemize}
+    \item \textit{Trace-preserving}: $\tr{\Lambda(\rho)}$ must equal 1 for all $\rho$.
+    \item \textit{Completely Positive}: when $\Lambda$ acts on part of a larger system, it must
+    preserve positivity for the entire system. A superoperator is \textit{positive} iff.
+    $\Lambda(\rho) \ge 0$ for all $\rho$. A superoperator is \textit{completely positive} iff.
+    $\Lambda \otimes \mathbb{I}_{\mathcal{A}}$ is positive for any auxiliary state space
+    $\mathcal{A}$.
+\end{itemize}
+This \ac{CPTP} constraint alone is sufficient -- any \ac{CPTP} superoperator can be physically
+implemented. The TP condition corresponds to $\superbra{\mathbb{I}} S_{\Lambda} =
+\superbra{\mathbb{I}}$. Since our basis is traceless for $i > 0$, then $\Lambda$ is TP iff. the
+first row of $S_{\Lambda}$ is $[1, 0, \dots, 0]$. The CP condition is a lot more tricky to describe.
+We first rewrite $S_{\Lambda}$ in the operator-sum representation:
+\begin{equation}
+    \Lambda : \rho \mapsto \sum_{ij} \chi_{ij}^{\Lambda} B_i \rho B_j^{\dagger}
+\end{equation}
+where $\{B_i\}$ is a basis, and $\chi_{ij}^{\Lambda}$ is a matrix of coefficients called the ``Choi
+process matrix'' which represents $\Lambda$. Similarly to the chi matrix representation from
+earlier, this completely describes $\Lambda$ (read
+\href{https://quantumcomputing.stackexchange.com/a/11814}{this answer} for more about their
+relationship). The mapping between $S_{\Lambda}$ and $\chi_{ij}^{\Lambda}$ is known as the
+Choi-Jamiołkowski isomorphism:
+\begin{equation}
+    \chi^{\Lambda} = d(S_{\Lambda} \otimes \mathbb{I}) \superket{\Pi_{\text{EPR}}}
+\end{equation}
+where $\superket{\Pi_{\text{EPR}}}$ is a maximally entangled state. Note that the equality above
+really means element-wise equality in a consistent basis. This is all quite complex. Fortunately,
+$\Lambda$ is CP iff. $\chi$ is positive semidefinite. 
+\todoin{Research Choi representation vs. Chi representation}
