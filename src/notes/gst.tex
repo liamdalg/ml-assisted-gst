@@ -65,8 +65,7 @@ therefore
     p_i = \superbraket{E_i | S_{\Lambda} | \rho} = \tr{E_i S_{\Lambda} \rho}
 \end{equation}
 
-Not all superoperators describe physically allowed operations. To be physically possible, they must
-be:
+Not all superoperators describe physical operations. To be physically possible, they must be:
 \begin{itemize}
     \item \textit{Trace-preserving}: $\tr{\Lambda(\rho)}$ must equal 1 for all $\rho$.
     \item \textit{Completely Positive}: when $\Lambda$ acts on part of a larger system, it must
@@ -94,5 +93,81 @@ Choi-Jamiołkowski isomorphism:
 \end{equation}
 where $\superket{\Pi_{\text{EPR}}}$ is a maximally entangled state. Note that the equality above
 really means element-wise equality in a consistent basis. This is all quite complex. Fortunately,
-$\Lambda$ is CP iff. $\chi$ is positive semidefinite. 
+the process is simple once we have the Choi process matrix: $\Lambda$ is CP iff. $\chi$ is positive
+semidefinite. 
 \todoin{Research Choi representation vs. Chi representation}
+
+\subsection{Gate Sets}
+
+A quantum processor's capabilities can be specified with a \textit{gate set}. Consider a processor
+that can perform:
+\begin{itemize}
+    \item $N_G$ distinct gates,
+    \item $N_{\rho}$ distinct state preparations,
+    \item $N_M$ distinct measurements, with $N_E^{(m)}$ distinct outcomes.
+\end{itemize}
+We can use these to construct a gate set
+\begin{equation}
+    \mathcal{G} = 
+    \left\{
+        \left\{
+            \superket{\rho^{(i)}}
+        \right\}^{N_{\rho}}_{i=1} ;
+        \left\{
+            G_i
+        \right\}^{N_G}_{i=1} ;
+        \left\{
+            \superbra{E_i^{(m)}}
+        \right\}^{N_m, N_E^{(m)}}_{m=1, i=1}
+    \right\}
+\end{equation}
+where
+\begin{equation}
+    \begin{aligned}
+        G_i : \mathcal{B(H)} \to \mathcal{B(H)}  \quad &\text{for} \quad i = 1, \dots, N_G \\
+        \superket{\rho^{(i)}} \in \mathcal{B(H)} \quad &\text{for} \quad i = 1, \dots, N_{\rho} \\
+        \superbra{E_i^{(m)}} \in \mathcal{B(H)}^*  \quad &\text{for} \quad m = 1, \dots, N_M, i = 1, \dots, N_E^{(m)} \\
+    \end{aligned}
+\end{equation}
+In other words, we can describe the capabilities of a quantum processor by collecting together the
+possible `input states', the quantum gates, and the possible measurement outcomes for each input
+state.
+
+\subsection{Circuits}
+
+The term `quantum circuit' can refer to different things. There are two related but distinct types
+of quantum circuit that we're interested in.
+\begin{itemize}
+    \item \textbf{Fixed-Input, Classical-Output (FI/CO)}: a quantum circuit where each experiment is
+    described by a quantum circuit that begins by initialising and ends by measuring all of the
+    qubits. A FI/CO circuit describes a probability distribution over classical bit strings.
+    \item \textbf{Quantum-Input, Quantum-Output (QI/QO)}: a quantum circuit which is an arrangement
+    of unitary logic gates, with no explicit initialisation or measurement. This may be inserted
+    into a large quantum circuit as a `sub-routine'.
+\end{itemize}
+
+QI/QO circuits are defined as a sequence of layers $S = (\gamma_1, \gamma_2, \dots, \gamma_L)$. Each
+layer corresponds to applying some superoperator $G_{\gamma_i}$. The entire QI/QO circuit $S$ also
+corresponds to applying a superoperator. We denote the transfer matrix for $S$ by $\tau(S)$, where
+\begin{equation}
+    \tau(S) = \tau((\gamma_1, \gamma_2, \dots, \gamma_L)) = G_{\gamma_L} \dots G_{\gamma_2} G_{\gamma_1}
+\end{equation}
+which is formed by composing the elements from each layer. Exponentiation of a circuit describes
+repetition, and since $S^2 = SS$, it follows that
+\begin{equation}
+    \tau(S^n) = \tau(S)^n
+\end{equation}
+
+For a set of FI/CO circuits, we can generate data sets by repeating each one $N$ times, and
+recording the results. The results are summarized by observed frequencies, $f_k = n_k / N$, which
+approaches the corresponding probabilities
+\begin{equation}
+    f_k \approx \superbraket{E_k^{(m)} | G_{\gamma_L} \dots G_{\gamma_2} G_{\gamma_1} | \rho^{(i)}}
+\end{equation}
+and can be used to estimate them. This is not the only way to do so, but it illustrates that we can
+infer some of $\superket{\rho^{(i)}}$, $\superbra{E_k^{(m)}}$, and $G_j$ based on observed
+frequencies. This is called tomography. \textit{Each type of tomography treats some of the
+operations as known, and uses them as the reference frame to estimate the others}.
+
+\subsection{Quantum State Tomography}
+
