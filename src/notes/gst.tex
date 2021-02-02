@@ -258,3 +258,13 @@ If $P$ is non-square, then again we use a pseudo-inverse:
 \begin{equation}
     G = (A^T A)^{-1} A^T P B^T (B B^T)^{-1}
 \end{equation}
+
+\subsection{Calibration}
+
+The requirements of fiducial states/measurements in state and process tomography show why GST being
+calibration-free is important. In practice, we never have access to perfectly known
+states/measurements, and they're also not noiseless. In order to identify the exact fiducial
+measurements for state tomography, we would need perfectly known states, which would require state
+tomography.  Similarly, process tomography relies on fiducial states and measurements which are
+almost always produced by applying quantum logic gates. Identifying these would again require
+process tomography. It's an endless loop of self-referentiality.
