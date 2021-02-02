@@ -211,9 +211,11 @@ Then, we can stack all of the effects into a single $N_{f1} \times d^2$ matrix
         \superbra{E_{N_{f1}}}
     \end{bmatrix}
 \end{equation}
-which gives $\vec{p} = A \superket{\rho}$. If $A$ is square, then we can recover $\rho$ with
-$\superket{\rho} = A^{-1} \vec{p}$. If $N_{f1}$ is greater than $d^2$, making $A$ non-square, we
-must solve with a pseudo-inverse $\superket{\rho} = (A^T A)^{-1} A^T \vec{p}$.
+which gives $\vec{p} = A \superket{\rho}$. If $A$ is square, then we can recover $\rho$ with:
+\begin{equation}
+    \superket{\rho} = A^{-1} \vec{p}
+\end{equation}
+If $N_{f1}$ is greater than $d^2$, making $A$ non-square, we must solve with a pseudo-inverse:
 \begin{equation}
     \begin{aligned}
         (A^T A)^{-1} A^T \vec{p} &= (A^T A)^{-1} A^T A \superket{\rho} \\
@@ -226,6 +228,33 @@ must solve with a pseudo-inverse $\superket{\rho} = (A^T A)^{-1} A^T \vec{p}$.
 \subsection{Quantum Process Tomography}
 
 In the context of process tomography, we're aiming to describe some quantum process (e.g. a quantum
-gate), given an informationally complete set of known fiducial states. Broadly, we prepare many
-copies of them, pass them through the target process, and perform state tomography on the output
-states.
+gate), given an informationally complete set of known fiducial states. Broadly,
+we prepare many copies of them, pass them through the target process, and perform state tomography
+on the output states.
+
+Let $G$ be the superoperator representing the process we want to reconstruct. If state $\rho_i$ is
+prepared, $G$ is applied, and measurement is performed with possible outcomes $\{E_j\}$, then the
+probability of observing $E_j$ is
+\begin{equation}
+    \begin{aligned}
+        P{j,i} &= \tr{E_j G[\rho_i]} \\
+               &= \superbraket{E_j | G | \rho_i}
+    \end{aligned}
+\end{equation}
+We can then define a $d^2 \times N_{f2}$ matrix $B$, similarly to $A$, which represents the fiducial
+states $\superket{\rho_i}$:
+\begin{equation}
+    B = 
+    \begin{bmatrix}
+        \superket{\rho_1} & \superket{\rho_2} & \dots & \superket{\rho_{N_{f2}}}
+    \end{bmatrix}
+\end{equation}
+which gives the $N_{f1} \times N_{f2}$ matrix $P = AGB$. Similarly to before, we can recover $G$ with
+(pseudo)-inverses. If $P$ is square, we can recover $G$ with:
+\begin{equation}
+    G = A^{-1} P B^{-1}
+\end{equation}
+If $P$ is non-square, then again we use a pseudo-inverse:
+\begin{equation}
+    G = (A^T A)^{-1} A^T P B^T (B B^T)^{-1}
+\end{equation}
