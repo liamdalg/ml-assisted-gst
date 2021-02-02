@@ -171,3 +171,61 @@ operations as known, and uses them as the reference frame to estimate the others
 
 \subsection{Quantum State Tomography}
 
+In order to perform \textit{any} type of tomography, we must have a \textit{fiducial} and
+\textit{informationally complete} set. ``Fiducial'' means that it is accepted as a fixed basis of
+reference, and ``informationally complete'' means that it will uniquely identify any target
+information. 
+
+In the context of state tomography, we're aiming to describe some unknown quantum state $\rho$,
+given some fiducial and informationally complete measurements. In other words, the measurements are
+a frame of reference and must uniquely identify $\rho$. This implies that the set of measurements
+$\{E_i^{(m)}\}_{m,i}$ must span the entire space of effects. To perform state tomography, many
+copies of $\rho$ are made available, and divided into $M$ pools. The $m$th fiducial measurement is
+applied to all the copies in the $m$th pool, and used to estimate the probabilities,
+\begin{equation}
+    p_i^{(m)} (\rho) = \tr{\rho E_i^{(m)}}
+\end{equation}
+which should uniquely identify $\rho$. In general, this is only true if we have infinite copies of
+$\rho$. In practice, we have limited numbers of $\rho$, and therefore $\hat{p}_i = f_i$ where $f_i$
+are the frequencies for each measurement. This often yields an estimate $\hat{\rho}$ which is not
+positive. Nevertheless, it is still useful.
+
+Let's assume that we have the exact probabilities for each measurement outcome for the state $\rho$.
+We can in fact ignore the measurements themselves, what is important is the list of effects, so we
+can write the set simply as $\{ E_j : j = 1, \dots, N_{f1}\}$ where $f1$ is the total number of
+distinct measurement outcomes. Additionally, we can represent these as dual vectors $\superbra{E_j}$
+in $\mathcal{B(H)}$ just like before. To recover $\rho$, we can write Born's rule as an inner
+product, 
+\begin{equation}
+    \begin{aligned}
+        p_j &= \tr{E_j \rho} \\
+            &= \superbraket{E_j | \rho}
+    \end{aligned}
+\end{equation}
+Then, we can stack all of the effects into a single $N_{f1} \times d^2$ matrix
+\begin{equation}
+    A = \begin{bmatrix}
+        \superbra{E_1} \\
+        \superbra{E_2} \\
+        \vdots \\
+        \superbra{E_{N_{f1}}}
+    \end{bmatrix}
+\end{equation}
+which gives $\vec{p} = A \superket{\rho}$. If $A$ is square, then we can recover $\rho$ with
+$\superket{\rho} = A^{-1} \vec{p}$. If $N_{f1}$ is greater than $d^2$, making $A$ non-square, we
+must solve with a pseudo-inverse $\superket{\rho} = (A^T A)^{-1} A^T \vec{p}$.
+\begin{equation}
+    \begin{aligned}
+        (A^T A)^{-1} A^T \vec{p} &= (A^T A)^{-1} A^T A \superket{\rho} \\
+                                 &= (A^T A)^{-1} (A^T A) \superket{\rho} \\
+                                 &= I \superket{\rho} \\
+                                 &= \superket{\rho}
+    \end{aligned}
+\end{equation}
+
+\subsection{Quantum Process Tomography}
+
+In the context of process tomography, we're aiming to describe some quantum process (e.g. a quantum
+gate), given an informationally complete set of known fiducial states. Broadly, we prepare many
+copies of them, pass them through the target process, and perform state tomography on the output
+states.
