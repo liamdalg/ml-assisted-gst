@@ -169,7 +169,9 @@ infer some of $\superket{\rho^{(i)}}$, $\superbra{E_k^{(m)}}$, and $G_j$ based o
 frequencies. This is called tomography. \textit{Each type of tomography treats some of the
 operations as known, and uses them as the reference frame to estimate the others}.
 
-\subsection{Quantum State Tomography}
+\subsection{Tomography}
+
+\subsubsection{Quantum State Tomography}
 
 In order to perform \textit{any} type of tomography, we must have a \textit{fiducial} and
 \textit{informationally complete} set. ``Fiducial'' means that it is accepted as a fixed basis of
@@ -225,7 +227,7 @@ If $N_{f1}$ is greater than $d^2$, making $A$ non-square, we must solve with a p
     \end{aligned}
 \end{equation}
 
-\subsection{Quantum Process Tomography}
+\subsubsection{Quantum Process Tomography}
 
 In the context of process tomography, we're aiming to describe some quantum process (e.g. a quantum
 gate), given an informationally complete set of known fiducial states. Broadly,
@@ -259,7 +261,7 @@ If $P$ is non-square, then again we use a pseudo-inverse:
     G = (A^T A)^{-1} A^T P B^T (B B^T)^{-1}
 \end{equation}
 
-\subsection{Calibration}
+\subsubsection{Calibration}
 
 The requirements of fiducial states/measurements in state and process tomography show why GST being
 calibration-free is important. In practice, we never have access to perfectly known
