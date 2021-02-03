@@ -136,7 +136,7 @@ state.
 The operations that a gate set describes are related to each other. In fact, the specification given
 above is an overspecification of the gate set. Consider a transformation of the gate set that acts
 as
-\begin{equation}
+\begin{equation} \label{eq:gauge_freedom}
     \begin{aligned}
         \superbra{E_i^{(m)}}  &\to \superbra{E_i^{(m)}} M^{-1} \\
         \superket{\rho^{(i)}} &\to M \superket{\rho^{(i)}} \\
@@ -265,8 +265,8 @@ states $\superket{\rho_i}$:
         \superket{\rho_1} & \superket{\rho_2} & \dots & \superket{\rho_{N_{f2}}}
     \end{bmatrix}
 \end{equation}
-which gives the $N_{f1} \times N_{f2}$ matrix $P = AGB$. Similarly to before, we can recover $G$ with
-(pseudo)-inverses. If $P$ is square, we can recover $G$ with:
+which gives the $N_{f1} \times N_{f2}$ matrix $P = AGB$. Similarly to before, we can recover $G$
+with (pseudo)-inverses. If $P$ is square, we can recover $G$ with:
 \begin{equation}
     G = A^{-1} P B^{-1}
 \end{equation}
@@ -284,3 +284,24 @@ measurements for state tomography, we would need perfectly known states, which w
 tomography.  Similarly, process tomography relies on fiducial states and measurements which are
 almost always produced by applying quantum logic gates. Identifying these would again require
 process tomography. It's an endless loop of self-referentiality.
+
+\subsection{Linear Gate Set Tomography (LGST)}
+
+\ac{LGST} looks very much like process tomography, but is doing something significantly different.
+Unlike process tomography, it reconstructs the entire gate set up to \textit{gauge freedom} as shown
+in Equation \ref{eq:gauge_freedom}. Quantum operations are usually described relative to an implicit
+and absolute reference frame. But in most experiments, no such reference frame is available. GST
+characterises all of these operations \textit{relative to each other}, and \textit{estimates} every
+property of a gate set that can be measured without a reference frame. Those that cannot be measured
+without a reference frame correspond to gauge degrees of freedom.
+
+Because of gauge freedom, the representation produced by \ac{LGST} is generally not unique. Another
+shortcoming of \ac{LGST} is its similarity to process tomography. $N$ trials of an event with
+probability $p$ generally yields $\hat{p} = p \pm O(1 / \sqrt{N})$, meaning that errors scale with
+$O(1 / \sqrt{N})$ like process tomography. Therefore, in order to estimate a gate set to within $\pm
+10^{-5}$ would require repeating each circuit $N \approx 10^{10}$ times, which is impractical.
+
+% not very note-like anymore is it? Turning into the full on thesis atm :D
+
+\subsubsection{LGST Algorithm}
+
