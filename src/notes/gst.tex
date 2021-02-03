@@ -133,6 +133,20 @@ In other words, we can describe the capabilities of a quantum processor by colle
 possible `input states', the quantum gates, and the possible measurement outcomes for each input
 state.
 
+The operations that a gate set describes are related to each other. In fact, the specification given
+above is an overspecification of the gate set. Consider a transformation of the gate set that acts
+as
+\begin{equation}
+    \begin{aligned}
+        \superbra{E_i^{(m)}}  &\to \superbra{E_i^{(m)}} M^{-1} \\
+        \superket{\rho^{(i)}} &\to M \superket{\rho^{(i)}} \\
+        G_i                   &\to M G_i M^{-1}
+    \end{aligned}
+\end{equation}
+where $M$ is an invertible superoperator. Although this changes the gate set, it does not change the
+observed probabilities (see Equation \ref{eq:observed_freq}). This means that gate sets in fact
+describe a family of equivalent gate sets. This degeneracy is known as \textit{gauge freedom}.
+
 \subsection{Circuits}
 
 The term `quantum circuit' can refer to different things. There are two related but distinct types
@@ -161,7 +175,7 @@ repetition, and since $S^2 = SS$, it follows that
 For a set of FI/CO circuits, we can generate data sets by repeating each one $N$ times, and
 recording the results. The results are summarized by observed frequencies, $f_k = n_k / N$, which
 approaches the corresponding probabilities
-\begin{equation}
+\begin{equation} \label{eq:observed_freq}
     f_k \approx \superbraket{E_k^{(m)} | G_{\gamma_L} \dots G_{\gamma_2} G_{\gamma_1} | \rho^{(i)}}
 \end{equation}
 and can be used to estimate them. This is not the only way to do so, but it illustrates that we can
