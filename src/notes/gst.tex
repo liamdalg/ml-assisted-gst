@@ -283,7 +283,8 @@ states/measurements, and they're also not noiseless. In order to identify the ex
 measurements for state tomography, we would need perfectly known states, which would require state
 tomography.  Similarly, process tomography relies on fiducial states and measurements which are
 almost always produced by applying quantum logic gates. Identifying these would again require
-process tomography. It's an endless loop of self-referentiality.
+process tomography. It's an endless loop of self-referentiality. In realistic scenarios, errors in
+state preparation and measurement (SPAM) dominate inaccuracy in process tomography.
 
 \subsection{Linear Gate Set Tomography (LGST)}
 
@@ -409,7 +410,7 @@ vectors of $\tilde{\mathbbm{1}}$ with the largest singular values. \textit{I thi
 to decomposing $\tilde{\mathbbm{1}} = U \Sigma V^*$ using SVD, and projecting onto the first $d^2$
 vectors of $V^*$. I am not sure why this minimises $|\tilde{\mathbbm{1}} - AB|^2$.}
 \todoin{Find out why $\tr{\Pi_c \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi_c}$ is minimised by
-using SVD here.}
+using SVD here. But is it actually important?}
 
 Subsituting $B = B_0 \Pi$ into the estimates for native states, gates, and effects yields
 \begin{align}
@@ -467,5 +468,87 @@ objective function is the likelihood function
 \begin{equation}
     \mathcal{L}(\text{gate set}) = \Pr (\text{data} | \text{gate set})
 \end{equation}
-Long-Sequence \ac{GST} will use this and cover how it works. \textit{Just know that least-squares
-does work, but MLE is better}.
+\textit{Just know that least-squares does work, but MLE is better}.
+
+\subsection{Long-Sequence Gate Set Tomography (LSGST)}
+
+If the $A$ and $B$ matrices are well-conditioned -- having condition number $O(1)$ -- then each
+element of $G_k$ is close to a linear combination of observed probabilities. The condition number
+shows how strongly small changes in an input are magnified in the output. If each circuit is
+performed $N$ times, then we know that
+\begin{equation}
+    \hat{p} = p \pm \frac{O(1)}{\sqrt{N}}
+\end{equation}
+where the accuracy is limited by SPAM noise. We can break this boundary by using \textit{deep
+circuits}, where a gate may appear many times. e.g. The probabilities for
+\begin{equation}
+    \superbraket{E | G_k G_k G_k G_k | \rho}
+\end{equation}
+are four times as sensitive as $\superbraket{E | G_k | \rho}$, which therefore allows four times the
+precision in estimating some aspects of $G_k$. This is the basis of \ac{LSGST}.
+
+Broadly, \ac{LSGST} circuits have three parts:
+\begin{enumerate}
+    \item Prepare a state $\superket{\rho_k'}$ by performing a native operation followed by a
+    fiducial circuit.
+    \item Perform $p$ repetitions of a short circuit $g$.
+    \item Perform a particular measurement $\superbra{E_i'^{(m)}}$ by performing a fiducial circuit
+    and then a native \ac{POVM} measurement.
+\end{enumerate}
+which we can use to estimate probabilities like
+\begin{equation}
+    p = \superbraket{E_i'^{(m)} | \tau(g_j^p) | \rho_k'}
+\end{equation}
+We call the short circuit $g$ a \textit{germ} and $p$ the \textit{germ power}. The idea here is that
+each repetition will amplify particular errors in $g$. e.g. Suppose we have $g = G$ where $G$ is a
+single unitary gate which rotates by $\theta$; tomography on $g^p$ measures $p\theta$ to a precision
+of $\pm \epsilon$, which means we have measured $\theta$ to a precision of $\pm \epsilon / p$. Two
+kinds of parameters cannot be amplified: gauge parameters cannot be measured at all, and SPAM
+operations cannot be amplified because they only occur once.
+
+A set of germs which amplifies all possible variation in the gate set is called
+\textit{amplificationally complete}. The set of germs which are amplificationally complete varies
+depending on the target gate set, so they must be determined for each new gate set. \textit{A set of
+germs $\{g_j\}$ is amplificationally complete iff. the union of the error subspaces amplified by
+each $g_j$ span the complement of the subspace of gauge variations}. 
+
+Once a set of germs is selected, a set of \textit{base circuits} must also be constructed. Each
+circuit is then raised to several powers $p$. Using several powers prevents aliasing issues, e.g.
+repeating an over-rotation of $\theta = \pi / 16$ by $p = 32$ would look like no error at all. What
+is important here is the depth $l$ of the circuit, not the number of repetitions $p$ itself. The
+optimal choices for $l$ are logarithmically spaced $l = 1, m, m^2, \dots$. Empirically, $m = 2$, i.e.
+$l = 1, 2, 4, 8, \dots$ was found to be a good starting point, but others may work. The depth of a
+``depth $l$'' circuit is actually approximately $l$: a germ of depth 5 would appear at first at $l =
+8, p = 1$, then again at $l = 16, p = 3$. Note that the maximum circuit depth $L$ is configurable,
+and should be carefully. Increasing $L$ yields more precision, but increases the time taken to
+analyse the data. Increasing $L$ beyond a certain point is useless since decoherence and stochastic
+errors will dominate. If the rate of decoherence is $\eta$, then little can be learned from circuits
+of depth $L > O(1) / \eta$.
+
+\vspace{1em}
+
+\begin{equation} \label{eq:lsgst_probabilities}
+    p_{abij} = \superbraket{E_{t(a)}^{m(a)} | \tau\left(H_{h(a)}\right) \tau(g_i)^{p_{i,j}} \tau\left(F_{f(b)}\right) | \rho^{r(b)}}
+\end{equation}
+
+\vspace{1em}
+
+\noindent With these changes, \ac{LSGST} experiments are constructed as follows:
+\begin{enumerate}
+    \item Select a set of amplificationally complete germs.
+    \item Select a set of base circuits given by $\mathcal{O} = \{g_i^{p_{i,j}}\}_{i,j}$ where $i$
+    indexes a germ and $p_{i, j}$ is the $j$-th power.
+    \item Perform the circuits in \ref{eq:lsgst_probabilities} to obtain probabilities, which
+    corresponds to:
+    \begin{enumerate}
+        \item Prepare the $r(b)$-th state.
+        \item Perform the circuit $F_{f(b)} g_i^{p_{i, j}} H_{h(a)}$.
+        \item Measure using the $m(a)$-th type of measurement.
+    \end{enumerate}
+    \item Estimate $p_{abij}$ with $\hat{p}_{abij} = f_{t(a)} = n_{t(a)} / N$, where $n_{t(a)}$ is
+    the number of times the $t(a)$-th outcome was observed after repeating the circuit $N$ times.
+\end{enumerate}
+
+\subsubsection{Estimating Gate Set Parameters with LSGST}
+
+
