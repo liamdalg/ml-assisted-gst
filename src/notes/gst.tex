@@ -417,3 +417,55 @@ Subsituting $B = B_0 \Pi$ into the estimates for native states, gates, and effec
     G_k                   &= B_0 \left(\Pi \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi^T \right)^{-1} \left(\Pi \tilde{\mathbbm{1}}^T P_k \Pi^T \right) B_0^{-1} \\
     \superbra{E_l^{(m)}}  &= \left[\vec{Q}_l^{(m)}\right]^T \Pi^T B_0^{-1}
 \end{align}
+
+\subsubsection{Fiducial States}
+
+We also assumed that informationally complete sets of fudicial states and effects were available.
+\textit{Most processors admit just one native state preparation and measurement}. Therefore,
+fiducial states and measurements must be implemented using gates from the gate set itself. To do
+this, we define two sets of QI/QO fiducial circuits. Each fiducial state is prepared by applying one
+of the preparation fiducial circuits to a native state, and each fiducial measurement is performed
+by applying one of the measurement fiducial circuits before a native measurement. We can represent
+this as
+\begin{align}
+    \superbra{E_i'}    &= \superbra{E_{t(i)}^{(m(i))}} \tau \left(H_{h(i)}\right) \\
+    \superket{\rho_j'} &= \tau \left(F_{f(j)}\right) \superket{\rho^{r(j)}}
+\end{align}
+which looks very complicated. \textit{Recall that $\tau(S)$ is the transfer matrix of $S$}.
+Notation:
+\begin{itemize}
+    \item $F_k$: preparation fiducial circuits
+    \item $H_k$: measurement fiducial circuits
+    \item $r(j)$: native preparation index
+    \item $m(i)$: native measurement index
+    \item $f(j), h(i)$: fiducial index
+\end{itemize}
+Consequences:
+\begin{itemize}
+    \item Every observable probability required can be obtained by running a specific circuit.
+    \item It reduces the number of free parameters in the model, because fiducial states are not
+    entirely independent.
+    \item It places the burden of informational completeness on the choice of fiducial circuits,
+    which requires the gates to be minimally erroneous. Errors can be checked by checking if the
+    $d^2$ largest singular values of $\tilde{\mathbbm{1}}$ are sufficiently large.
+\end{itemize}
+
+\subsubsection{MLE}
+
+\textit{This is more of an aside? Nothing concrete was given here, but might be worth mentioning 
+in background chapter?}
+
+\vspace{1em}
+
+\noindent The LGST algorithms described aim to minimise the objective function
+\begin{equation}
+    f(\text{gate set}) = \sum_j \left(p_j^{\text{gate set}} - f_j^{\text{observed}}\right)^2
+\end{equation}
+but actually, not really. It doesn't minimise the average squared error over the entire dataset
+because it doesn't take other observed probabilities into account, e.g. those in $P_k$. A better
+objective function is the likelihood function
+\begin{equation}
+    \mathcal{L}(\text{gate set}) = \Pr (\text{data} | \text{gate set})
+\end{equation}
+Long-Sequence \ac{GST} will use this and cover how it works. \textit{Just know that least-squares
+does work, but MLE is better}.
