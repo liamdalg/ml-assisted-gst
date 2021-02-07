@@ -305,3 +305,115 @@ $O(1 / \sqrt{N})$ like process tomography. Therefore, in order to estimate a gat
 
 \subsubsection{LGST Algorithm}
 
+We make some assumptions first, which we relax later:
+\begin{itemize}
+    \item We can create informationally complete sets of fiducial states and measurement effects.
+    However, we do not know them.
+    \item We ignore finite sample error.
+    \item We assume that the fiducial states and effects are \textit{exactly} informationally
+    complete, giving $N_{f1} = N_{f2} = d^2$.
+\end{itemize}
+
+Similarly to process tomography, to reconstruct the set of gates $\{G_k\}$, we require a matrix
+$P_k$ for each gate:
+\begin{equation}
+    [P_k]_{i,j} = \superbraket{E_i' | G_k | \rho_j'}
+\end{equation}
+We don't know what $\rho_j'$ and $E_i'$ are, but we are able to prepare them, meaning that we can
+measure the probabilities that they produce. As before, we have
+\begin{equation}
+    P_k = A G_k B
+\end{equation}
+but \textit{we do not know what $A$ or $B$ are}. So it may seem that we cannot solve for $G_k$.
+Instead, we measure some additional probabilities that correspond to tomography on the \textit{null
+operation} which will take our ignorance about $\rho_j'$ and $E_i'$ into account. We arrange these
+into a Gram matrix
+\begin{equation}
+    \tilde{\mathbbm{1}}_{i, j} = \superbraket{E_i' | \rho_j'}
+\end{equation}
+which is in fact $\tilde{\mathbbm{1}} = AB$. Then we can solve for $G_k$ with
+\begin{equation}
+    G_k = B \tilde{\mathbbm{1}}^{-1} P_k B^{-1}
+\end{equation}
+To reconstruct the states $\rho^{(l)}$ and measurement effects $\{E_l^{(m)}\}$, we can similarly
+construct vectors of observable probabilities:
+\begin{equation}
+    \begin{aligned}
+        \left[\vec{R}^{(l)}\right]_j &= \superbraket{E_j' | \rho^{(l)}} \\
+        \left[\vec{Q}^{(m)}\right]_j &= \superbraket{E_l^{(m)} | \rho_j'} \\
+    \end{aligned}
+\end{equation}
+Measuring these probabilities corresponds to state tomography on each native state $\rho^{(l)}$, and
+measurement tomography on every native effect $\{E_l^{(m)}\}$. They can be written in terms of $A$
+and $B$ as
+\begin{equation}
+    \begin{aligned}
+        \vec{R}^{(l)} &= A \superket{\rho^{(l)}} \\
+        \vec{Q}_l^{(m)T} &= \superbraket{E_l^{(m)} | \rho_j'} \\
+    \end{aligned}
+\end{equation}
+which we can sub $\tilde{\mathbbm{1}} = AB$ into to get:
+\begin{align}
+    G_k                   &= B \tilde{\mathbbm{1}}^{-1} P_k B^{-1} \\
+    \superket{\rho^{(l)}} &= B \tilde{\mathbbm{1}}^{-1} \vec{R}^{(l)} \\
+    \superbra{E_l^{(m)}}  &= \vec{Q}_l^{(m)T} B^{-1}
+\end{align}
+\textit{This has recovered the original gate set up to gauge freedom}! The best choice for $B$
+requires \textit{a posteriori} gauge-fixing.
+\todoin{Look at gauge-fixing}
+
+\subsubsection{Over-Completeness}
+
+We assumed that $N_{f1} = N_{f2} = d^2$, but this isn't always the case. This means that $A$, $B$
+and $P_k$ are generally not square and invertible. Additionally, due to finite sample errors,
+\begin{equation}
+    \begin{aligned}
+        P_k                 &= A G_k B \\
+        \tilde{\mathbbm{1}} &= AB
+    \end{aligned}
+\end{equation}
+may not have exact solutions. Instead we can find an approximate solution with a least-squares
+estimator, i.e. we want to minimise $|P_k - A G_k B|^2$ and $|\tilde{\mathbbm{1}} - AB|^2$. For
+$|\tilde{\mathbbm{1}} - AB|^2$, using differentiation yields
+\begin{equation} \label{eq:min_i_tilde}
+    A = \tilde{\mathbbm{1}} B^T (B B^T)^{-1}
+\end{equation}
+We can do the same for $|P_k - A G_k B|^2$ and solve for $G_k$ with pseudo-inverses, yielding
+\begin{equation}
+    G_k = (A^T A)^{-1} A^T P_k B^T (B B^T)^{-1}
+\end{equation}
+and substituting $A$ from before yields
+\begin{equation}
+    G_k = B \left[ B^T \left(B \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}}\right)^{-1} B\right]
+    \tilde{\mathbbm{1}}^T P_k \left[B^T (B B^T)^{-1}\right]
+\end{equation}
+This is just a generic version of the formulation from before, \textit{however}, $B$ is no longer
+assumed to be square and invertible. In this case, this isn't true, which means that $B$ does affect
+the probability estimates, but \textit{only through its support}. $B$ has dimensions $d^2 \times
+N_{f1}$, but since the fiducial states are informationally complete, then its rows only span a
+$d^2$-dimensional subspace of the space of observable probabilities. 
+
+We can write $B$ as $B = B_0 \Pi$ where $\Pi$ is a $d^2 \times N_{f1}$ matrix and $B_0$ is a $d^2
+\times d^2$ matrix. Here, $B_0$ determines \textit{only} the gauge, while $\Pi$ has a real effect --
+we can choose $B_0$ arbitrarily, but not $\Pi$. To choose an optimal $\Pi$, first we rewrite out
+$AB$ using Equation \ref{eq:min_i_tilde} as
+\begin{equation}
+    AB = \tilde{\mathbbm{1}} B^T (B B^T)^{-1} B = \tilde{\mathbbm{1}} \Pi^T \Pi
+\end{equation}
+and then defining the complement projector $\Pi_c = \mathbb{I} - \Pi^T \Pi$ gives
+\begin{equation}
+    |\tilde{\mathbbm{1}} - AB|^2 = \tr{\Pi_c \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi_c}
+\end{equation}
+This is uniquely minimised by choosing $\Pi$ to be the projector onto the $d^2$ right singular
+vectors of $\tilde{\mathbbm{1}}$ with the largest singular values. \textit{I think this is referring
+to decomposing $\tilde{\mathbbm{1}} = U \Sigma V^*$ using SVD, and projecting onto the first $d^2$
+vectors of $V^*$. I am not sure why this minimises $|\tilde{\mathbbm{1}} - AB|^2$.}
+\todoin{Find out why $\tr{\Pi_c \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi_c}$ is minimised by
+using SVD here.}
+
+Subsituting $B = B_0 \Pi$ into the estimates for native states, gates, and effects yields
+\begin{align}
+    \superket{\rho^{(l)}} &= B_0 \left(\Pi \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi^T \right)^{-1} \Pi \tilde{\mathbbm{1}}^T \vec{R}^{(l)} \\
+    G_k                   &= B_0 \left(\Pi \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi^T \right)^{-1} \left(\Pi \tilde{\mathbbm{1}}^T P_k \Pi^T \right) B_0^{-1} \\
+    \superbra{E_l^{(m)}}  &= \left[\vec{Q}_l^{(m)}\right]^T \Pi^T B_0^{-1}
+\end{align}
