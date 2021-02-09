@@ -23,11 +23,11 @@ which will output to the `build/` directory.
 
 ### Preliminary Reading
 
-- [ ] Understand the importance of the problem of estimating the average fidelity of fundamental gates for quantum computing in any platform.
-- [ ] Understand the importance of process tomography and its limitations due to reference frames.
+- [x] Understand the importance of the problem of estimating the average fidelity of fundamental gates for quantum computing in any platform.
+- [x] Understand the importance of process tomography and its limitations due to reference frames.
     - [x] Read Nielsen & Chuang Chapter 8.
-    - [ ] Read [Qiskit Documentation](https://qiskit.org/textbook/ch-quantum-hardware/randomized-benchmarking.html) to understand Randomized Benchmarking.
-    - [ ] Know how the above are related to measurable quantities, and how to measure expectation values and POVMs in terms of projectors.
+    - [x] Read [Qiskit Documentation](https://qiskit.org/textbook/ch-quantum-hardware/randomized-benchmarking.html) to understand Randomized Benchmarking.
+    - [x] Know how the above are related to measurable quantities, and how to measure expectation values and POVMs in terms of projectors.
 - [ ] Understand the importance of Gate Set Tomography (GST).
     - [ ] Read the following papers ([1](https://www.nature.com/articles/ncomms14485), [2](https://arxiv.org/pdf/2009.07301.pdf)).
     - [ ] Understand the impossibility of reproducing the same exact procedure to a photonic path-encoded qubit.
