@@ -537,7 +537,7 @@ of depth $L > O(1) / \eta$.
 \begin{enumerate}
     \item Select a set of amplificationally complete germs.
     \item Select a set of base circuits given by $\mathcal{O} = \{g_i^{p_{i,j}}\}_{i,j}$ where $i$
-    indexes a germ and $p_{i, j}$ is the $j$-th power.
+    indexes a germ and $p_{i, j}$ is the $j$-th power applied to the $i$-th germ.
     \item Perform the circuits in \ref{eq:lsgst_probabilities} to obtain probabilities, which
     corresponds to:
     \begin{enumerate}
@@ -550,5 +550,58 @@ of depth $L > O(1) / \eta$.
 \end{enumerate}
 
 \subsubsection{Estimating Gate Set Parameters with LSGST}
+
+Previously, we saw that MLE is a better choice of objective function over least-squares, although
+we'll be using the log-likelihood since it is simpler. MLE answers the question ``given a set of
+data, which set of parameters is most likely to produce it?'' To answer this, we must create a
+\textit{model} for a gate set. $\mathcal{G}$ denotes a gate set model which maps a vector of
+parameters $\vec{\theta}$ to concrete gate set. In other words, the gate set is decided entirely by
+the set of parameters $\vec{\theta}$ and the choice of mapping. LSGST is agnostic to the choice of
+model, but usually the model imposes constraints such as \ac{CPTP}. \textit{Would the parameters
+here be the calibration of the Mach-Zehender interferometers}?
+
+We're aiming to fit the data gathered from \ac{LSGST} experiments as shown in the previous section.
+The log-likelihood of a single circuit is the multinomial likelihood for an $m_s$-outcome Bernoulli
+scheme
+\begin{equation}
+    \log \mathcal{L}_s = N_s \sum_{\beta_s} f_{s, \beta_s} \log(p_{s, \beta_s})
+\end{equation}
+where 
+\begin{itemize}
+    \item $s$ indexes the circuits,
+    \item $N_s$ is the total number of times circuit $s$ was repeated,
+    \item $m_s$ is the number of outcomes of $s$,
+    \item $N_{s, \beta_s}$ is the number of times outcome $\beta_s$ was observed,
+    \item $p_{s, \beta_s}$ is the true probability \textit{predicted} by $\mathcal{G}$ of getting
+    outcome $\beta_s$,
+    \item $f_{s, \beta_s}$ is the observed frequency for outcome $\beta_s$.
+\end{itemize}
+For the entire experiment, we simply sum over all circuits
+\begin{equation}
+    \log \mathcal{L} = \sum_s \log \mathcal{L}_s = \sum_{s, \beta_s} N_s f_{s, \beta_s} \log(p_{s, \beta_s})
+\end{equation}
+
+Estimating the maximum likelihood is actually pretty hard, so a good `first guess' is important.
+\ac{LGST} provides a good starting point for the parameters, which can then be refined by
+incorporating the \ac{LSGST} data in order to maximise the log-likelihood. Broadly, it works as:
+\begin{enumerate}
+    \item Generate an \ac{LSGST} dataset $\mathcal{D}_0$.
+    \item Calculate an initial set of parameters $\vec{\theta} \leftarrow \vec{\theta}_0$ using \ac{LGST}.
+    \item For each circuit depth $L \in 1, m, m^2, \dots$
+    \begin{enumerate}
+        \item Take the subset $\mathcal{D} \subseteq \mathcal{D}_0$ corresponding to circuits whose
+        germ-power has depth $\le L$.
+        \item Update the current estimate $\vec{\theta}$ according to $\arg \min (\chi^2,
+        \mathcal{G}, \mathcal{D}, \vec{\theta})$, which returns the local optimum for $\chi^2
+        (\mathcal{G}(\vec{\theta}), \mathcal{D})$.
+    \end{enumerate}
+    \item Calculate the final estimate $\vec{\theta}$ according to $\arg \min (- \log \mathcal{L},
+    \mathcal{G}, \mathcal{D}_0, \vec{\theta})$.
+\end{enumerate}
+The basic idea here is that each estimate gets closer and closer to the true MLE, whilst being much
+easier to calculate. The $\chi^2$ statistic is a local approximation to the negative log-likelihood,
+and can be computed faster.
+
+%% IM GOING TOO DEEP INTO THE THEORY!
 
 
