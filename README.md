@@ -29,8 +29,8 @@ which will output to the `build/` directory.
     - [x] Read [Qiskit Documentation](https://qiskit.org/textbook/ch-quantum-hardware/randomized-benchmarking.html) to understand Randomized Benchmarking.
     - [x] Know how the above are related to measurable quantities, and how to measure expectation values and POVMs in terms of projectors.
 - [ ] Understand the importance of Gate Set Tomography (GST).
-    - [ ] Read the following papers ([1](https://www.nature.com/articles/ncomms14485), [2](https://arxiv.org/pdf/2009.07301.pdf)).
-    - [ ] Understand the impossibility of reproducing the same exact procedure to a photonic path-encoded qubit.
+    - [X] Read the following papers ([1](https://www.nature.com/articles/ncomms14485), [2](https://arxiv.org/pdf/2009.07301.pdf)).
+    - [X] Understand the impossibility of reproducing the same exact procedure to a photonic path-encoded qubit.
     - [ ] Rephrase the GST problem to learning the phase shifter calibration, grouping the beam splitters at the start.
 
 ### Milestones
