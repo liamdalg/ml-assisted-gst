@@ -2,15 +2,11 @@
 
 Notes taken from \cite{nielsen_gate_2020}.
 
-\todoin{In the final dissertation, the precise mathematics of quantum state, process, and
-measurement tomography are not important. Remove these bits and trim down the in-depth detail of
-LGST and LSGST. See presentation slides for required information.}
-
 \noindent \ac{GST} differs from state and process tomography in that:
 \begin{itemize}
     \item It is almost entirely calibration-free. It does not depend upon a prior description of the
     measurements used (as in state tomography) or the states that can be prepared (as in process
-    tomography). \textit{These are called ``reference frame'' operations in the literature?}
+    tomography).
     \item It estimates an entire set of logic operations, rather than a single one.
 \end{itemize}
 
@@ -36,7 +32,7 @@ the set of normalised Pauli matrices $\{ \mathbb{I} / \sqrt{2}, \sigma_x / \sqrt
     > 0$.
 \end{itemize}
 
-Elements of $\mathcal{B(H)}$ are represented using an `extension' of Dirac's bra-ket notation called
+Elements of $\mathcal{B(H)}$ are represented using an extension of Dirac's bra-ket notation called
 \textit{super bra-ket notation}. Some element $B$ is represented as a column vector $\superket{B}$,
 and an element of its dual space by a row vector $\superbra{A}$. Everything works similarly to
 regular Dirac notation, the main difference is that we can represent everything as vectors in
@@ -54,12 +50,11 @@ to $\mathcal{B(H)}$ is referring to the real subspace.
 
 An \textit{ideal} quantum logic gate is \textit{reversible} and corresponds to a unitary transform
 of $\mathcal{H}$. Such a gate would transform $\rho$ as $\rho \to U \rho U^{\dagger}$ for some
-unitary matrix $U$. This is a linear transformation from $\mathcal{B(H)}$ to itself; the linear
-transformation $\rho \to U \rho U^{\dagger}$ is called a \textit{superoperator}. In reality, logic
-gates are not perfectly reversible. These superoperators are known as quantum processes or quantum
-channels. We can represent any superoperator $\Lambda$ as a $d^2 \times d^2$ matrix, which acts on
-$\superket{\rho} \in \mathcal{B(H)}$ by left multiplication. This representation is called the
-\textit{transfer matrix} of $\Lambda$, and is denoted by $S_{\Lambda}$. Thus,
+unitary matrix $U$. The linear transformation $\rho \to U \rho U^{\dagger}$ is called a
+\textit{superoperator}, and describe quantum processes or quantum channels. We can represent any
+superoperator $\Lambda$ as a $d^2 \times d^2$ matrix, which acts on $\superket{\rho} \in
+\mathcal{B(H)}$ by left multiplication. This representation is called the \textit{transfer matrix}
+of $\Lambda$, and is denoted by $S_{\Lambda}$. Thus,
 \begin{equation}
     \Lambda : \superket{\rho} \mapsto S_{\Lambda} \superket{\rho}
 \end{equation}
@@ -79,27 +74,10 @@ Not all superoperators describe physical operations. To be physically possible, 
     $\mathcal{A}$.
 \end{itemize}
 This \ac{CPTP} constraint alone is sufficient -- any \ac{CPTP} superoperator can be physically
-implemented. The TP condition corresponds to $\superbra{\mathbb{I}} S_{\Lambda} =
-\superbra{\mathbb{I}}$. Since our basis is traceless for $i > 0$, then $\Lambda$ is TP iff. the
-first row of $S_{\Lambda}$ is $[1, 0, \dots, 0]$. The CP condition is a lot more tricky to describe.
-We first rewrite $S_{\Lambda}$ in the operator-sum representation:
-\begin{equation}
-    \Lambda : \rho \mapsto \sum_{ij} \chi_{ij}^{\Lambda} B_i \rho B_j^{\dagger}
-\end{equation}
-where $\{B_i\}$ is a basis, and $\chi_{ij}^{\Lambda}$ is a matrix of coefficients called the ``Choi
-process matrix'' which represents $\Lambda$. Similarly to the chi matrix representation from
-earlier, this completely describes $\Lambda$ (read
-\href{https://quantumcomputing.stackexchange.com/a/11814}{this answer} for more about their
-relationship). The mapping between $S_{\Lambda}$ and $\chi_{ij}^{\Lambda}$ is known as the
-Choi-Jamiołkowski isomorphism:
-\begin{equation}
-    \chi^{\Lambda} = d(S_{\Lambda} \otimes \mathbb{I}) \superket{\Pi_{\text{EPR}}}
-\end{equation}
-where $\superket{\Pi_{\text{EPR}}}$ is a maximally entangled state. Note that the equality above
-really means element-wise equality in a consistent basis. This is all quite complex. Fortunately,
-the process is simple once we have the Choi process matrix: $\Lambda$ is CP iff. $\chi$ is positive
-semidefinite. 
-\todoin{Research Choi representation vs. Chi representation}
+implemented. 
+
+\todoin{Removed irrelevant information here about CPTP -- can just cite it if necessary (it's 
+probably not)}
 
 \subsection{Gate Sets}
 
@@ -133,13 +111,9 @@ where
         \superbra{E_i^{(m)}} \in \mathcal{B(H)}^*  \quad &\text{for} \quad m = 1, \dots, N_M, i = 1, \dots, N_E^{(m)} \\
     \end{aligned}
 \end{equation}
-In other words, we can describe the capabilities of a quantum processor by collecting together the
-possible `input states', the quantum gates, and the possible measurement outcomes for each input
-state.
 
-The operations that a gate set describes are related to each other. In fact, the specification given
-above is an overspecification of the gate set. Consider a transformation of the gate set that acts
-as
+The specification given above is an \textit{overspecification} of the gate set. Consider a
+transformation of the gate set that acts as
 \begin{equation} \label{eq:gauge_freedom}
     \begin{aligned}
         \superbra{E_i^{(m)}}  &\to \superbra{E_i^{(m)}} M^{-1} \\
@@ -153,8 +127,7 @@ describe a family of equivalent gate sets. This degeneracy is known as \textit{g
 
 \subsection{Circuits}
 
-The term `quantum circuit' can refer to different things. There are two related but distinct types
-of quantum circuit that we're interested in.
+There are two related but distinct types of quantum circuit that we're interested in:
 \begin{itemize}
     \item \textbf{Fixed-Input, Classical-Output (FI/CO)}: a quantum circuit where each experiment is
     described by a quantum circuit that begins by initialising and ends by measuring all of the
@@ -178,16 +151,17 @@ repetition, and since $S^2 = SS$, it follows that
 
 For a set of FI/CO circuits, we can generate data sets by repeating each one $N$ times, and
 recording the results. The results are summarized by observed frequencies, $f_k = n_k / N$, which
-approaches the corresponding probabilities
+estimates the corresponding probabilities
 \begin{equation} \label{eq:observed_freq}
     f_k \approx \superbraket{E_k^{(m)} | G_{\gamma_L} \dots G_{\gamma_2} G_{\gamma_1} | \rho^{(i)}}
 \end{equation}
-and can be used to estimate them. This is not the only way to do so, but it illustrates that we can
-infer some of $\superket{\rho^{(i)}}$, $\superbra{E_k^{(m)}}$, and $G_j$ based on observed
-frequencies. This is called tomography. \textit{Each type of tomography treats some of the
-operations as known, and uses them as the reference frame to estimate the others}.
+Estimating $\superket{\rho^{(i)}}$, $\superbra{E_k^{(m)}}$, and $G_j$ based on observed
+probabilities is called \textit{tomography}.
 
 \subsection{Tomography}
+
+\todoin{Remove most of this. Cite the original GST paper and review paper and simply state the
+important results instead.}
 
 \subsubsection{Quantum State Tomography}
 
@@ -247,17 +221,16 @@ If $N_{f1}$ is greater than $d^2$, making $A$ non-square, we must solve with a p
 
 \subsubsection{Quantum Process Tomography}
 
-In the context of process tomography, we're aiming to describe some quantum process (e.g. a quantum
-gate), given an informationally complete set of known fiducial states. Broadly,
-we prepare many copies of them, pass them through the target process, and perform state tomography
-on the output states.
+Process tomography to describe some quantum process (e.g. a quantum gate), given an informationally
+complete set of known fiducial states. Broadly, we prepare many copies of them, pass them through
+the target process, and perform state tomography on the output states.
 
 Let $G$ be the superoperator representing the process we want to reconstruct. If state $\rho_i$ is
 prepared, $G$ is applied, and measurement is performed with possible outcomes $\{E_j\}$, then the
 probability of observing $E_j$ is
 \begin{equation}
     \begin{aligned}
-        P{j,i} &= \tr{E_j G[\rho_i]} \\
+        P_{j,i} &= \tr{E_j G[\rho_i]} \\
                &= \superbraket{E_j | G | \rho_i}
     \end{aligned}
 \end{equation}
@@ -288,9 +261,12 @@ measurements for state tomography, we would need perfectly known states, which w
 tomography.  Similarly, process tomography relies on fiducial states and measurements which are
 almost always produced by applying quantum logic gates. Identifying these would again require
 process tomography. It's an endless loop of self-referentiality. In realistic scenarios, errors in
-state preparation and measurement (SPAM) dominate inaccuracy in process tomography.
+\ac{SPAM} dominate inaccuracy in process tomography.
 
 \subsection{Linear Gate Set Tomography (LGST)}
+
+\todoin{Again, might be worth cutting out most of this and stating the important results, especially
+the maths.}
 
 \ac{LGST} looks very much like process tomography, but is doing something significantly different.
 Unlike process tomography, it reconstructs the entire gate set up to \textit{gauge freedom} as shown
@@ -410,13 +386,8 @@ and then defining the complement projector $\Pi_c = \mathbb{I} - \Pi^T \Pi$ give
     |\tilde{\mathbbm{1}} - AB|^2 = \tr{\Pi_c \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi_c}
 \end{equation}
 This is uniquely minimised by choosing $\Pi$ to be the projector onto the $d^2$ right singular
-vectors of $\tilde{\mathbbm{1}}$ with the largest singular values. \textit{I think this is referring
-to decomposing $\tilde{\mathbbm{1}} = U \Sigma V^*$ using SVD, and projecting onto the first $d^2$
-vectors of $V^*$. I am not sure why this minimises $|\tilde{\mathbbm{1}} - AB|^2$.}
-\todoin{Find out why $\tr{\Pi_c \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi_c}$ is minimised by
-using SVD here. But is it actually important?}
-
-Subsituting $B = B_0 \Pi$ into the estimates for native states, gates, and effects yields
+vectors of $\tilde{\mathbbm{1}}$ with the largest singular values. Subsituting $B = B_0 \Pi$ into
+the estimates for native states, gates, and effects yields
 \begin{align}
     \superket{\rho^{(l)}} &= B_0 \left(\Pi \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi^T \right)^{-1} \Pi \tilde{\mathbbm{1}}^T \vec{R}^{(l)} \\
     G_k                   &= B_0 \left(\Pi \tilde{\mathbbm{1}}^T \tilde{\mathbbm{1}} \Pi^T \right)^{-1} \left(\Pi \tilde{\mathbbm{1}}^T P_k \Pi^T \right) B_0^{-1} \\
@@ -455,26 +426,9 @@ Consequences:
     $d^2$ largest singular values of $\tilde{\mathbbm{1}}$ are sufficiently large.
 \end{itemize}
 
-\subsubsection{MLE}
-
-\textit{This is more of an aside? Nothing concrete was given here, but might be worth mentioning 
-in background chapter?}
-
-\vspace{1em}
-
-\noindent The LGST algorithms described aim to minimise the objective function
-\begin{equation}
-    f(\text{gate set}) = \sum_j \left(p_j^{\text{gate set}} - f_j^{\text{observed}}\right)^2
-\end{equation}
-but actually, not really. It doesn't minimise the average squared error over the entire dataset
-because it doesn't take other observed probabilities into account, e.g. those in $P_k$. A better
-objective function is the likelihood function
-\begin{equation}
-    \mathcal{L}(\text{gate set}) = \Pr (\text{data} | \text{gate set})
-\end{equation}
-\textit{Just know that least-squares does work, but MLE is better}.
-
 \subsection{Long-Sequence Gate Set Tomography (LSGST)}
+
+\todoin{Again, might be worth cutting out most of this and stating the important results.}
 
 If the $A$ and $B$ matrices are well-conditioned -- having condition number $O(1)$ -- then each
 element of $G_k$ is close to a linear combination of observed probabilities. The condition number
@@ -483,7 +437,7 @@ performed $N$ times, then we know that
 \begin{equation}
     \hat{p} = p \pm \frac{O(1)}{\sqrt{N}}
 \end{equation}
-where the accuracy is limited by SPAM noise. We can break this boundary by using \textit{deep
+where the accuracy is limited by \ac{SPAM} noise. We can break this boundary by using \textit{deep
 circuits}, where a gate may appear many times. e.g. The probabilities for
 \begin{equation}
     \superbraket{E | G_k G_k G_k G_k | \rho}
@@ -507,7 +461,7 @@ We call the short circuit $g$ a \textit{germ} and $p$ the \textit{germ power}. T
 each repetition will amplify particular errors in $g$. e.g. Suppose we have $g = G$ where $G$ is a
 single unitary gate which rotates by $\theta$; tomography on $g^p$ measures $p\theta$ to a precision
 of $\pm \epsilon$, which means we have measured $\theta$ to a precision of $\pm \epsilon / p$. Two
-kinds of parameters cannot be amplified: gauge parameters cannot be measured at all, and SPAM
+kinds of parameters cannot be amplified: gauge parameters cannot be measured at all, and \ac{SPAM}
 operations cannot be amplified because they only occur once.
 
 A set of germs which amplifies all possible variation in the gate set is called
@@ -555,14 +509,11 @@ of depth $L > O(1) / \eta$.
 
 \subsubsection{Estimating Gate Set Parameters with LSGST}
 
-Previously, we saw that MLE is a better choice of objective function over least-squares, although
-we'll be using the log-likelihood since it is simpler. MLE answers the question ``given a set of
-data, which set of parameters is most likely to produce it?'' To answer this, we must create a
-\textit{model} for a gate set. $\mathcal{G}$ denotes a gate set model which maps a vector of
-parameters $\vec{\theta}$ to concrete gate set. In other words, the gate set is decided entirely by
-the set of parameters $\vec{\theta}$ and the choice of mapping. LSGST is agnostic to the choice of
-model, but usually the model imposes constraints such as \ac{CPTP}. \textit{Would the parameters
-here be the calibration of the Mach-Zehender interferometers}?
+In \ac{LGST} we estimated the gate set directly, however, \ac{LSGST} estimates a
+\textit{parameterised model} of the gate set using \ac{MLE}. This has two benefits. Firstly, this
+completely divorces the analysis from tomography, since we're only aiming to recover parameters
+given some data. Secondly, this allows us to enforce constraints on the target gate set such as
+\ac{CPTP}.
 
 We're aiming to fit the data gathered from \ac{LSGST} experiments as shown in the previous section.
 The log-likelihood of a single circuit is the multinomial likelihood for an $m_s$-outcome Bernoulli
@@ -605,5 +556,3 @@ incorporating the \ac{LSGST} data in order to maximise the log-likelihood. Broad
 The basic idea here is that each estimate gets closer and closer to the true MLE, whilst being much
 easier to calculate. The $\chi^2$ statistic is a local approximation to the negative log-likelihood,
 and can be computed faster.
-
-\todoin{IM GOING TOO DEEP INTO THE THEORY!}
