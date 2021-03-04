@@ -5,11 +5,9 @@ Final year project for MEng. Computer Science at the University of Bristol. Curr
 > Facilitating the calibration of complex quantum photonic circuits with machine learning 
 > assisted gate set tomography
 
-At the moment, this repository is just for my dissertation notes and introduction chapters.
-
 ## Paper
 
-Paper can be found in `build/main.pdf`. If you want to build it yourself for whatever reason, run:
+Paper can be found in `paper/build/main.pdf`. If you want to build it yourself for whatever reason, run:
 
 
 ```bash
@@ -28,10 +26,10 @@ which will output to the `build/` directory.
     - [x] Read Nielsen & Chuang Chapter 8.
     - [x] Read [Qiskit Documentation](https://qiskit.org/textbook/ch-quantum-hardware/randomized-benchmarking.html) to understand Randomized Benchmarking.
     - [x] Know how the above are related to measurable quantities, and how to measure expectation values and POVMs in terms of projectors.
-- [ ] Understand the importance of Gate Set Tomography (GST).
+- [x] Understand the importance of Gate Set Tomography (GST).
     - [X] Read the following papers ([1](https://www.nature.com/articles/ncomms14485), [2](https://arxiv.org/pdf/2009.07301.pdf)).
     - [X] Understand the impossibility of reproducing the same exact procedure to a photonic path-encoded qubit.
-    - [ ] Rephrase the GST problem to learning the phase shifter calibration, grouping the beam splitters at the start.
+    - [x] Rephrase the GST problem to learning the phase shifter calibration, grouping the beam splitters at the start.
 
 ### Milestones
 
