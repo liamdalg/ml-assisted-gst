@@ -53,10 +53,11 @@ def get_unitary(powers: np.ndarray, c_mat: np.ndarray, phi0: np.ndarray) -> np.n
 
 
 def likelihood(
-    input_state: np.ndarray, output_state: np.ndarray, powers: np.ndarray, c_mat: np.ndarray,
+    input_state: np.ndarray, output_state: np.ndarray, power: np.ndarray, c_mat: np.ndarray,
     phi0: np.ndarray
-) -> np.ndarray:
-    pass
+) -> float:
+    unitary = get_unitary(power, c_mat, phi0)
+    return np.abs(np.conjugate(output_state) @ unitary @ input_state) ** 2
 
 
 def liu_west_resample(
@@ -66,10 +67,20 @@ def liu_west_resample(
 
 
 def update_estimate(
-    particles: List[Tuple[np.ndarray, np.ndarray]], weights: np.ndarray, input_states: np.ndarray,
-    output_states: np.ndarray, powers: np.ndarray, resample_threshold: float, resample_a: float
+    particles: List[Tuple[np.ndarray, np.ndarray]], weights: np.ndarray, input_state: np.ndarray,
+    output_state: np.ndarray, power: np.ndarray, resample_threshold: float, resample_a: float
 ) -> Tuple[List[Tuple[np.ndarray, np.ndarray]], np.ndarray]:
-    return (None, None)
+    """Does stuff"""
+
+    new_weights = np.zeros_like(weights)
+    for i, (c_mat, phi0) in enumerate(particles):
+        new_weights[i] = likelihood(input_state, output_state, power, c_mat, phi0)
+    new_weights /= np.sum(new_weights)
+
+    if np.sum(new_weights ** 2) > 1 / (resample_threshold * weights.shape[0]):
+        return liu_west_resample(particles, weights, resample_a)
+    else:
+        return particles, new_weights
 
 
 # TODO: put data loading + preparation into functions or other file
@@ -96,7 +107,7 @@ for i, state in enumerate(out_states):
 data_length, heaters = powers.shape
 particle_count = 300
 resample_threshold = 0.4
-a = 0.9  # a is a parameter for the Liu-West resampler
+resample_a = 0.9  # a is a parameter for the Liu-West resampler
 
 power_interval = (0., 50.)
 c_diag_mean = 2 * np.pi / max(power_interval)
@@ -114,6 +125,7 @@ weights = np.full(particle_count, 1.0 / particle_count)
 particles_evolution = []
 for i in tqdm(range(data_length)):
     particles, weights = update_estimate(
-        particles, weights, input_states, output_states, powers, resample_threshold, a
+        particles, weights, input_states[i], output_states[i], powers[i], resample_threshold,
+        resample_a
     )
     particles_evolution.append((particles, weights))
