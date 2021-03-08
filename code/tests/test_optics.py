@@ -44,3 +44,38 @@ def test_bsi():
         [0, INV_SQRT_2, 0, 1j * INV_SQRT_2]
     ])
     assert np.allclose(bsi_134, bsi_134_expected)
+
+
+def test_phase():
+    phase_02pi = optics.phase_shifter(0, 2, np.pi)
+    phase_02pi_expected = np.array([[np.exp(1j * np.pi), 0], [0, 1]])
+    assert np.allclose(phase_02pi, phase_02pi_expected)
+
+    phase_12pi = optics.phase_shifter(1, 2, np.pi)
+    phase_12pi_expected = np.array([[1, 0], [0, np.exp(1j * np.pi)]])
+    assert np.allclose(phase_12pi, phase_12pi_expected)
+
+
+def test_mzi():
+    mzi_012pi = optics.mach_zehnder(0, 1, 2, np.pi)
+    mzi_012pi_expected = 0.5 * np.array([
+        [1 - np.exp(1j * np.pi), 1j + 1j * np.exp(1j * np.pi)],
+        [1j + 1j * np.exp(1j * np.pi), -1 + np.exp(1j * np.pi)]
+    ])
+    assert np.allclose(mzi_012pi, mzi_012pi_expected)
+
+    mzi_102 = optics.mach_zehnder(1, 0, 2, np.pi)
+    mzi_102_expected = 0.5 * np.array([
+        [-1 + np.exp(1j * np.pi), 1j + 1j * np.exp(1j * np.pi)],
+        [1j + 1j * np.exp(1j * np.pi), 1 - np.exp(1j * np.pi)]
+    ])
+    assert np.allclose(mzi_102, mzi_102_expected)
+
+    mzi_134 = optics.mach_zehnder(1, 3, 4, np.pi)
+    mzi_134_expected = 0.5 * np.array([
+        [2, 0, 0, 0],
+        [0, 1 - np.exp(1j * np.pi), 0, 1j + 1j * np.exp(1j * np.pi)],
+        [0, 0, 2, 0],
+        [0, 1j + 1j * np.exp(1j * np.pi), 0, -1 + np.exp(1j * np.pi)]
+    ])
+    assert np.allclose(mzi_134, mzi_134_expected)
