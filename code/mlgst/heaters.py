@@ -51,7 +51,7 @@ def mean_cov(arr: np.ndarray, weights: np.ndarray) -> Tuple[np.ndarray, np.ndarr
 
 
 def cov_norm(arr: np.ndarray, weights: np.ndarray) -> float:
-    _, cov = mean_cov(arr.reshape((arr.shape[0], -1)), weights)
+    _, cov = mean_cov(arr, weights)
     eig = linalg.eigvals(cov)
     return linalg.norm(eig)
 
@@ -154,10 +154,6 @@ c_diag_mean = 2 * np.pi / max(power_interval)
 c_diag_sd = 0.3 * c_diag_mean
 corr_interval = (-0.2 * c_diag_mean, 0.2 * c_diag_mean)
 
-# TODO: experiment with the data layout for the particles
-# right now they're stored as 3d stacked matrices, where each matrix is a single particle
-# it requires some funky reshaping in the mean_cov function to get it to work properly
-# should probably just simplify it and reshape as necessary :\
 particles_c = np.zeros((particle_count, heaters, heaters))
 particles_phi = np.zeros((particle_count, heaters))
 weights = np.full(particle_count, 1.0 / particle_count)
@@ -174,9 +170,15 @@ for i in tqdm(range(data_length)):
         resample_threshold, resample_a
     )
     particles_evolution.append((particles_c, particles_phi, weights))
+    flat_particles = np.concatenate((particles_c.reshape((particle_count, -1)), particles_phi), axis=1)
+    cov_evolution.append(cov_norm(flat_particles, weights))
+
+plt.semilogy(np.arange(data_length), cov_evolution)
+plt.show()
 
 final_c, final_phi, final_weights = particles_evolution[-1]
 flat_particles = np.concatenate((final_c.reshape((particle_count, -1)), final_phi), axis=1)
 mean, cov = mean_cov(flat_particles, final_weights)
-print(mean)
-print(cov)
+sd = np.sqrt(np.diag(cov))
+print(f'Estimated C matrix:\n {mean[:(heaters * heaters)].reshape((heaters, heaters))} ± {sd[:(heaters * heaters)].reshape((heaters, heaters))}')
+print(f'Estimated ϕ0 vector:\n {mean[-1 * heaters:]} ± {sd[-1 * heaters:]}')
