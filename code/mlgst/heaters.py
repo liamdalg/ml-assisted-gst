@@ -1,15 +1,14 @@
-from typing import List, Tuple
+from typing import Tuple
 
 import h5py
 import numpy as np
 
 from matplotlib import pyplot as plt
 from numpy.random import default_rng
-from numpy import linalg
-from scipy.linalg import orth
 from tqdm import tqdm
 
 from optics import get_unitary
+from algebra import orthogonal_vector, mean_cov, cov_norm
 
 # h5py's default label for complex numbers is ('r', 'i')
 # change to ('Re', 'Im') to match Mathematica's format
@@ -18,19 +17,33 @@ conf.complex_names = ('Re', 'Im')
 rng = default_rng()
 
 
-def random_vector(dim: int) -> np.ndarray:
-    """Generate a complex random vector of dimension `dim`."""
-    real = rng.standard_normal((dim,))
-    imag = rng.standard_normal((dim,))
-    return real + (imag * 1j)
+def flatten_particles(particles_c: np.ndarray, particles_phi: np.ndarray) -> np.ndarray:
+    """Flatten each particle into a vector, and combine into a single stack of particles.
+
+    Args:
+        particles_c: 3d array of stacked matrices, where each matrix is a single particle.
+        particles_phi: 2d array of vectors, where each vector is a single particle.
+
+    Returns:
+        2d array of vectors, where each vector is a flattened C matrix followed by a phi vector.
+    """
+    flattened_c = particles_c.reshape((particles_c.shape[0], -1))
+    return np.concatenate((flattened_c, particles_phi), axis=1)
 
 
-def orthogonal_vector(vec: np.ndarray) -> np.ndarray:
-    """Generate a random vector which is orthogonal to `vec`."""
-    rand_vec = random_vector(vec.shape[0])
-    mat = np.column_stack((vec, rand_vec))
-    q, _ = linalg.qr(mat)
-    return q[:, 1]
+def unflatten_particles(flat_particles: np.ndarray, heaters: int) -> Tuple[np.ndarray, np.ndarray]:
+    """Reverses `flatten_particles`.
+
+    Args:
+        flat_particles: 2d array of vectors, where each vector is a flattened particle.
+        heaters: number of heaters.
+
+    Returns:
+        A 3d array of stacked matrices where each matrix has dimension (`heaters` x `heaters`), and
+        a 2d array of vectors where each vector has length `heaters`
+    """
+    particles_c, particles_phi = np.split(flat_particles, [heaters * heaters], axis=1)
+    return particles_c.reshape((particles_c.shape[0], heaters, heaters)), particles_phi
 
 
 def init_c(
@@ -41,19 +54,6 @@ def init_c(
     c_matrix = rng.uniform(corr_low, corr_high, (heaters, heaters))
     c_matrix[np.diag_indices_from(c_matrix)] = rng.normal(diag_mean, diag_sd, heaters)
     return c_matrix
-
-
-def mean_cov(arr: np.ndarray, weights: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """Calculate the mean and co-variance of `arr`, weighted by `weights`."""
-    mean = np.sum(weights[:, np.newaxis] * arr, axis=0)
-    cov = np.sum(weights[:, np.newaxis, np.newaxis] * (arr[:, :, np.newaxis] @ arr[:, np.newaxis, :]), axis=0) - (mean[:, np.newaxis] * mean)
-    return mean, cov
-
-
-def cov_norm(arr: np.ndarray, weights: np.ndarray) -> float:
-    _, cov = mean_cov(arr, weights)
-    eig = linalg.eigvals(cov)
-    return linalg.norm(eig)
 
 
 def likelihood(
@@ -71,7 +71,8 @@ def liu_west_resample(
     particles_c: np.ndarray, particles_phi: np.ndarray, weights: np.ndarray, a: float
 ) -> np.ndarray:
     """Resample `particles` using the Liu and West (2001) resampler."""
-    flat_particles = np.concatenate((particles_c.reshape((particles_c.shape[0], -1)), particles_phi), axis=1)
+    flat_particles = flatten_particles(particles_c, particles_phi)
+
     mean, cov = mean_cov(flat_particles, weights)
     cov *= (1 - (a ** 2))
 
@@ -86,14 +87,13 @@ def liu_west_resample(
                 break
         new_particles[i] = rng.multivariate_normal(resample_means[j], cov)
 
-    heaters = particles_phi.shape[1]
-    new_c, new_phi = np.split(new_particles, [heaters * heaters], axis=1)
-    return new_c.reshape((particle_count, heaters, heaters)), new_phi
+    return unflatten_particles(new_particles, particles_phi.shape[1])
 
 
 def update_estimate(
-    particles_c: np.ndarray, particles_phi: np.ndarray, weights: np.ndarray, input_state: np.ndarray,
-    output_state: np.ndarray, powers: np.ndarray, resample_threshold: float, resample_a: float
+    particles_c: np.ndarray, particles_phi: np.ndarray, weights: np.ndarray,
+    input_state: np.ndarray, output_state: np.ndarray, powers: np.ndarray,
+    resample_threshold: float, resample_a: float
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Update the weightings for each particle estimate. If necessary, the particles are also
     resampled.
@@ -126,6 +126,22 @@ def update_estimate(
         weights.fill(1.0 / weights.shape[0])
 
     return particles_c, particles_phi, weights
+
+
+def final_estimate(
+    final_c: np.ndarray, final_phi: np.ndarray, final_weights: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Calculate the final mean estimate of all particles, and the standard deviation."""
+    heaters = final_phi.shape[1]
+    mean, cov = mean_cov(flatten_particles(final_c, final_phi), final_weights)
+    sd = np.sqrt(np.diag(cov))
+
+    mean_c = mean[:(heaters * heaters)].reshape((heaters, heaters))
+    mean_phi = mean[-1 * heaters:]
+    sd_c = sd[:(heaters * heaters)].reshape((heaters, heaters))
+    sd_phi = sd[-1 * heaters:]
+
+    return mean_c, sd_c, mean_phi, sd_phi
 
 
 # TODO: put data loading + preparation into functions or other file
@@ -170,15 +186,11 @@ for i in tqdm(range(data_length)):
         resample_threshold, resample_a
     )
     particles_evolution.append((particles_c, particles_phi, weights))
-    flat_particles = np.concatenate((particles_c.reshape((particle_count, -1)), particles_phi), axis=1)
-    cov_evolution.append(cov_norm(flat_particles, weights))
+    cov_evolution.append(cov_norm(flatten_particles(particles_c, particles_phi), weights))
+
+mean_c, sd_c, mean_phi, sd_phi = final_estimate(*particles_evolution[-1])
+print(f'Estimated C matrix:\n {mean_c} ± {sd_c}')
+print(f'Estimated ϕ0 vector:\n {mean_phi} ± {sd_phi}')
 
 plt.semilogy(np.arange(data_length), cov_evolution)
 plt.show()
-
-final_c, final_phi, final_weights = particles_evolution[-1]
-flat_particles = np.concatenate((final_c.reshape((particle_count, -1)), final_phi), axis=1)
-mean, cov = mean_cov(flat_particles, final_weights)
-sd = np.sqrt(np.diag(cov))
-print(f'Estimated C matrix:\n {mean[:(heaters * heaters)].reshape((heaters, heaters))} ± {sd[:(heaters * heaters)].reshape((heaters, heaters))}')
-print(f'Estimated ϕ0 vector:\n {mean[-1 * heaters:]} ± {sd[-1 * heaters:]}')
